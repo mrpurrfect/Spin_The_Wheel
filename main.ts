@@ -8,11 +8,17 @@ enum ActionKind {
     roulette_chest,
     roulette_boss,
     sword_none,
-    sword_swing
+    sword_swing,
+    boss_left,
+    boss_right
 }
 namespace SpriteKind {
     export const none = SpriteKind.create()
     export const damaging = SpriteKind.create()
+    export const Boss = SpriteKind.create()
+}
+namespace StatusBarKind {
+    export const BossHealth = StatusBarKind.create()
 }
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.damaging, function (sprite, otherSprite) {
     if (sprites.readDataString(otherSprite, "type") == "sword") {
@@ -238,7 +244,11 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                 }
             } else if (numofpulls > 2) {
                 readyforpull = false
-                tiles.setCurrentTilemap(tileUtil.createSmallMap(tilemap`level2`))
+                if (boss) {
+                    tiles.setCurrentTilemap(tileUtil.createSmallMap(tilemap`level5`))
+                } else {
+                    tiles.setCurrentTilemap(tileUtil.createSmallMap(tilemap`level2`))
+                }
                 mySprite4 = sprites.create(img`
                     . . . . . . . . . . b 5 b . . . 
                     . . . . . . . . . b 5 b . . . . 
@@ -298,6 +308,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                         ................................
                         ................................
                         `, SpriteKind.damaging)
+                    mySprite5.setPosition(mySprite4.x, mySprite4.y)
                     mySprite5.follow(mySprite4, 200)
                     sprites.setDataString(mySprite5, "type", "sword")
                     if (blockSettings.readNumber("Weapon") == 1) {
@@ -378,40 +389,101 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                         `)
                     animation.attachAnimation(mySprite5, anim)
                 }
-                mySprite6 = sprites.create(img`
-                    . . f f f . . . . . . . . f f f 
-                    . f f c c . . . . . . f c b b c 
-                    f f c c . . . . . . f c b b c . 
-                    f c f c . . . . . . f b c c c . 
-                    f f f c c . c c . f c b b c c . 
-                    f f c 3 c c 3 c c f b c b b c . 
-                    f f b 3 b c 3 b c f b c c b c . 
-                    . c b b b b b b c b b c c c . . 
-                    . c 1 b b b 1 b b c c c c . . . 
-                    c b b b b b b b b b c c . . . . 
-                    c b c b b b c b b b b f . . . . 
-                    f b 1 f f f 1 b b b b f c . . . 
-                    f b b b b b b b b b b f c c . . 
-                    . f b b b b b b b b c f . . . . 
-                    . . f b b b b b b c f . . . . . 
-                    . . . f f f f f f f . . . . . . 
-                    `, SpriteKind.Enemy)
-                mySprite6.follow(mySprite4, 40)
-                if (numofskull > 1) {
-                    statusbar = statusbars.create(30, 4, StatusBarKind.EnemyHealth)
-                    statusbar.max = 25
-                    statusbar.value = 25
+                if (boss) {
+                    anim = animation.createAnimation(ActionKind.boss_left, 1000)
+                    anim.addAnimationFrame(img`
+                        . . . c c c c c c . . . . . . . 
+                        . . c 6 7 7 7 7 6 c . . . . . . 
+                        . c 7 7 7 7 7 7 7 7 c . . . . . 
+                        c 6 7 7 7 7 7 7 7 7 6 c . . . . 
+                        c 7 c 6 6 6 6 c 7 7 7 c . . . . 
+                        f 7 6 f 6 6 f 6 7 7 7 f . . . . 
+                        f 7 7 7 7 7 7 7 7 7 7 f . . . . 
+                        . f 7 7 7 7 6 c 7 7 6 f . . . . 
+                        . . f c c c c 7 7 6 f c c c . . 
+                        . . c 6 2 7 7 7 f c c 7 7 7 c . 
+                        . c 6 7 7 2 7 7 c f 6 7 7 7 7 c 
+                        . c 1 1 1 1 7 6 6 c 6 6 6 c c c 
+                        . c 1 1 1 1 1 6 6 6 6 6 6 c . . 
+                        . c 6 1 1 1 1 1 6 6 6 6 6 c . . 
+                        . . c 6 1 1 1 1 1 7 6 6 c c . . 
+                        . . . c c c c c c c c c c . . . 
+                        `)
+                    anim2 = animation.createAnimation(ActionKind.boss_right, 1000)
+                    anim2.addAnimationFrame(img`
+                        . . . . . . . c c c c c c . . . 
+                        . . . . . . c 6 7 7 7 7 6 c . . 
+                        . . . . . c 7 7 7 7 7 7 7 7 c . 
+                        . . . . c 6 7 7 7 7 7 7 7 7 6 c 
+                        . . . . c 7 7 7 c 6 6 6 6 c 7 c 
+                        . . . . f 7 7 7 6 f 6 6 f 6 7 f 
+                        . . . . f 7 7 7 7 7 7 7 7 7 7 f 
+                        . . . . f 6 7 7 c 6 7 7 7 7 f . 
+                        . . c c c f 6 7 7 c c c c f . . 
+                        . c 7 7 7 c c f 7 7 7 2 6 c . . 
+                        c 7 7 7 7 6 f c 7 7 2 7 7 6 c . 
+                        c c c 6 6 6 c 6 6 7 1 1 1 1 c . 
+                        . . c 6 6 6 6 6 6 1 1 1 1 1 c . 
+                        . . c 6 6 6 6 6 1 1 1 1 1 6 c . 
+                        . . c c 6 6 7 1 1 1 1 1 6 c . . 
+                        . . . c c c c c c c c c c . . . 
+                        `)
+                    mySprite6 = sprites.create(img`
+                        . . . c c c c c c . . . . . . . 
+                        . . c 6 7 7 7 7 6 c . . . . . . 
+                        . c 7 7 7 7 7 7 7 7 c . . . . . 
+                        c 6 7 7 7 7 7 7 7 7 6 c . . . . 
+                        c 7 c 6 6 6 6 c 7 7 7 c . . . . 
+                        f 7 6 f 6 6 f 6 7 7 7 f . . . . 
+                        f 7 7 7 7 7 7 7 7 7 7 f . . . . 
+                        . f 7 7 7 7 6 c 7 7 6 f . . . . 
+                        . . f c c c c 7 7 6 f c c c . . 
+                        . . c 6 2 7 7 7 f c c 7 7 7 c . 
+                        . c 6 7 7 2 7 7 c f 6 7 7 7 7 c 
+                        . c 1 1 1 1 7 6 6 c 6 6 6 c c c 
+                        . c 1 1 1 1 1 6 6 6 6 6 6 c . . 
+                        . c 6 1 1 1 1 1 6 6 6 6 6 c . . 
+                        . . c 6 1 1 1 1 1 7 6 6 c c . . 
+                        . . . c c c c c c c c c c . . . 
+                        `, SpriteKind.Boss)
+                    animation.attachAnimation(mySprite6, anim)
+                    animation.attachAnimation(mySprite6, anim2)
+                    statusbar = statusbars.create(160, 6, StatusBarKind.BossHealth)
+                    statusbar.max = 10
+                    statusbar.value = 10
+                    statusbar.setColor(2, 15)
+                    statusbar.setBarBorder(1, 15)
+                    statusbar.y = 3
+                    for (let index = 0; index < 10; index++) {
+                        mySprite6 = sprites.create(img`
+                            . . . c c c c c c . . . . . . . 
+                            . . c 6 7 7 7 7 6 c . . . . . . 
+                            . c 7 7 7 7 7 7 7 7 c . . . . . 
+                            c 6 7 7 7 7 7 7 7 7 6 c . . . . 
+                            c 7 c 6 6 6 6 c 7 7 7 c . . . . 
+                            f 7 6 f 6 6 f 6 7 7 7 f . . . . 
+                            f 7 7 7 7 7 7 7 7 7 7 f . . . . 
+                            . f 7 7 7 7 6 c 7 7 6 f . . . . 
+                            . . f c c c c 7 7 6 f c c c . . 
+                            . . c 6 2 7 7 7 f c c 7 7 7 c . 
+                            . c 6 7 7 2 7 7 c f 6 7 7 7 7 c 
+                            . c 1 1 1 1 7 6 6 c 6 6 6 c c c 
+                            . c 1 1 1 1 1 6 6 6 6 6 6 c . . 
+                            . c 6 1 1 1 1 1 6 6 6 6 6 c . . 
+                            . . c 6 1 1 1 1 1 7 6 6 c c . . 
+                            . . . c c c c c c c c c c . . . 
+                            `, SpriteKind.Enemy)
+                        animation.attachAnimation(mySprite6, anim)
+                        animation.attachAnimation(mySprite6, anim2)
+                        statusbar = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
+                        statusbar.max = 15
+                        statusbar.value = 15
+                        statusbar.attachToSprite(mySprite6)
+                        statusbar.setColor(2, 15)
+                        statusbar.setBarBorder(1, 15)
+                    }
                 } else {
-                    statusbar = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
-                    statusbar.max = 15
-                    statusbar.value = 15
-                }
-                statusbar.attachToSprite(mySprite6)
-                statusbar.setColor(2, 15)
-                statusbar.setBarBorder(1, 15)
-                if (numofskull > 0) {
-                    mySprite6.x = 40
-                    mySprite7 = sprites.create(img`
+                    mySprite6 = sprites.create(img`
                         . . f f f . . . . . . . . f f f 
                         . f f c c . . . . . . f c b b c 
                         f f c c . . . . . . f c b b c . 
@@ -429,7 +501,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                         . . f b b b b b b c f . . . . . 
                         . . . f f f f f f f . . . . . . 
                         `, SpriteKind.Enemy)
-                    mySprite7.follow(mySprite4, 40)
+                    mySprite6.follow(mySprite4, 40)
                     if (numofskull > 1) {
                         statusbar = statusbars.create(30, 4, StatusBarKind.EnemyHealth)
                         statusbar.max = 25
@@ -439,12 +511,12 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                         statusbar.max = 15
                         statusbar.value = 15
                     }
-                    statusbar.attachToSprite(mySprite7)
+                    statusbar.attachToSprite(mySprite6)
                     statusbar.setColor(2, 15)
                     statusbar.setBarBorder(1, 15)
-                    mySprite7.x = 120
-                    if (numofskull > 2) {
-                        mySprite8 = sprites.create(img`
+                    if (numofskull > 0) {
+                        mySprite6.x = 40
+                        mySprite7 = sprites.create(img`
                             . . f f f . . . . . . . . f f f 
                             . f f c c . . . . . . f c b b c 
                             f f c c . . . . . . f c b b c . 
@@ -462,7 +534,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                             . . f b b b b b b c f . . . . . 
                             . . . f f f f f f f . . . . . . 
                             `, SpriteKind.Enemy)
-                        mySprite8.follow(mySprite4, 40)
+                        mySprite7.follow(mySprite4, 40)
                         if (numofskull > 1) {
                             statusbar = statusbars.create(30, 4, StatusBarKind.EnemyHealth)
                             statusbar.max = 25
@@ -472,9 +544,43 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                             statusbar.max = 15
                             statusbar.value = 15
                         }
-                        statusbar.attachToSprite(mySprite8)
+                        statusbar.attachToSprite(mySprite7)
                         statusbar.setColor(2, 15)
                         statusbar.setBarBorder(1, 15)
+                        mySprite7.x = 120
+                        if (numofskull > 2) {
+                            mySprite8 = sprites.create(img`
+                                . . f f f . . . . . . . . f f f 
+                                . f f c c . . . . . . f c b b c 
+                                f f c c . . . . . . f c b b c . 
+                                f c f c . . . . . . f b c c c . 
+                                f f f c c . c c . f c b b c c . 
+                                f f c 3 c c 3 c c f b c b b c . 
+                                f f b 3 b c 3 b c f b c c b c . 
+                                . c b b b b b b c b b c c c . . 
+                                . c 1 b b b 1 b b c c c c . . . 
+                                c b b b b b b b b b c c . . . . 
+                                c b c b b b c b b b b f . . . . 
+                                f b 1 f f f 1 b b b b f c . . . 
+                                f b b b b b b b b b b f c c . . 
+                                . f b b b b b b b b c f . . . . 
+                                . . f b b b b b b c f . . . . . 
+                                . . . f f f f f f f . . . . . . 
+                                `, SpriteKind.Enemy)
+                            mySprite8.follow(mySprite4, 40)
+                            if (numofskull > 1) {
+                                statusbar = statusbars.create(30, 4, StatusBarKind.EnemyHealth)
+                                statusbar.max = 25
+                                statusbar.value = 25
+                            } else {
+                                statusbar = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
+                                statusbar.max = 15
+                                statusbar.value = 15
+                            }
+                            statusbar.attachToSprite(mySprite8)
+                            statusbar.setColor(2, 15)
+                            statusbar.setBarBorder(1, 15)
+                        }
                     }
                 }
                 Ingame = true
@@ -775,6 +881,7 @@ let mySprite8: Sprite = null
 let mySprite7: Sprite = null
 let statusbar: StatusBarSprite = null
 let mySprite6: Sprite = null
+let anim2: animation.Animation = null
 let mySprite5: Sprite = null
 let mySprite4: Sprite = null
 let pull3 = 0
@@ -798,7 +905,6 @@ if (!(blockSettings.exists("Round"))) {
     blockSettings.writeNumber("Round", 1)
 }
 if (blockSettings.readNumber("boss next") == 1) {
-    blockSettings.writeNumber("boss next", 0)
     boss = true
     game.splash("BOSS ROUND", "Round " + convertToText(blockSettings.readNumber("Round")))
 } else {
@@ -825,8 +931,11 @@ numofcoin = 0
 numofskull = 0
 let numofchest = 0
 let numofvs = 0
-numofpulls = 0
-let Music = 0
+if (boss) {
+    numofpulls = 3
+} else {
+    numofpulls = 0
+}
 direction = 1
 scene.setBackgroundImage(img`
     2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
@@ -1078,367 +1187,369 @@ mySprite3 = sprites.create(img`
     2222222222222222222222222222222222222222
     `, SpriteKind.none)
 mySprite3.x = 120
-anim = animation.createAnimation(ActionKind.roulette_spin, 100)
-anim.addAnimationFrame(img`
-    2222222222222222222222222222222222222222
-    2222222222222222222222222222222222222222
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    22111111111111cccccccccccc11111111111122
-    221111111111cc555555555555cc111111111122
-    2211111111cc5555555555555555cc1111111122
-    221111111c5555555cccccc5555555c111111122
-    22111111c55555555c5555c55555555c11111122
-    2211111c555555555c5555c555555555c1111122
-    221111c5555555555c5555c5555555555c111122
-    221111c5555555555c5555c5555555555c111122
-    22111c55555555555c5555c55555555555c11122
-    22111c55555555555c5555c55555555555c11122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    22111c55555555555c5555c55555555555c11122
-    22111c55555555555c5555c55555555555c11122
-    221111c5555555555c5555c5555555555c111122
-    221111c5555555555c5555c5555555555c111122
-    2211111c555555555c5555c555555555c1111122
-    22111111c55555555c5555c55555555c11111122
-    221111111c5555555cccccc5555555c111111122
-    2211111111cc5555555555555555cc1111111122
-    221111111111cc555555555555cc111111111122
-    22111111111111cccccccccccc11111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2222222222222222222222222222222222222222
-    2222222222222222222222222222222222222222
-    `)
-anim.addAnimationFrame(img`
-    2222222222222222222222222222222222222222
-    2222222222222222222222222222222222222222
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111ffffffffffffffffffffffffff1111122
-    221111f11111111111111111111111111f111122
-    22111f1111111111111111111111111111f11122
-    2211f111111111111111111111111111111f1122
-    2211f1111fffff111111111111fffff1111f1122
-    2211f111f11111f1111111111f11111f111f1122
-    2211f111f11111f1111111111f11111f111f1122
-    2211f111f11111f1111111111f11111f111f1122
-    2211f111f11111f1111111111f11111f111f1122
-    2211f111f11111f1111111111f11111f111f1122
-    2211f1111fffff111111111111fffff1111f1122
-    2211f111111111111111111111111111111f1122
-    2211f111111111111111111111111111111f1122
-    2211f111111111111111111111111111111f1122
-    2211f111111111111111111111111111111f1122
-    22111f1111111111111111111111111111f11122
-    221111f111111ff1111ff1111ff111111f111122
-    2211111ff111f11f11f11f11f11f111ff1111122
-    221111111f11f11f11f11f11f11f11f111111122
-    221111111f11f11f11f11f11f11f11f111111122
-    221111111f11f11f11f11f11f11f11f111111122
-    221111111f11f11f11f11f11f11f11f111111122
-    221111111f11f11f11f11f11f11f11f111111122
-    221111111f11f11f11f11f11f11f11f111111122
-    221111111f11f11f11f11f11f11f11f111111122
-    221111111f11f11f11f11f11f11f11f111111122
-    2211111111ff1111ff1111ff1111ff1111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2222222222222222222222222222222222222222
-    2222222222222222222222222222222222222222
-    `)
-anim.addAnimationFrame(img`
-    2222222222222222222222222222222222222222
-    2222222222222222222222222222222222222222
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    22111111bbbbbbbbbbbbbbbbbbbbbbbb11111122
-    22111111bbbbbbbbbbbbbbbbbbbbbbbb11111122
-    221111bbee44444444444444444444eebb111122
-    221111bbee44444444444444444444eebb111122
-    2211bbee444444444444444444444444eebb1122
-    2211bbee444444444444444444444444eebb1122
-    2211bbee444444444444444444444444eebb1122
-    2211bbee444444444444444444444444eebb1122
-    2211bbee444444444444444444444444eebb1122
-    2211bbee444444444444444444444444eebb1122
-    2211bbeeee44444444444444444444eeeebb1122
-    2211bbeeee44444444444444444444eeeebb1122
-    2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
-    2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
-    2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
-    2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
-    2211bbbbbbbbbbbbbbddddbbbbbbbbbbbbbb1122
-    2211bbbbbbbbbbbbbbddddbbbbbbbbbbbbbb1122
-    2211ccbbbbbbbbbbbbccccbbbbbbbbbbbbcc1122
-    2211ccbbbbbbbbbbbbccccbbbbbbbbbbbbcc1122
-    2211ccccccccccccbbccccbbcccccccccccc1122
-    2211ccccccccccccbbccccbbcccccccccccc1122
-    2211bbeeeeeeeeeeccbbbbcceeeeeeeeeebb1122
-    2211bbeeeeeeeeeeccbbbbcceeeeeeeeeebb1122
-    2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
-    2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
-    2211bbcceeeeeeeeeeeeeeeeeeeeeeeeccbb1122
-    2211bbcceeeeeeeeeeeeeeeeeeeeeeeeccbb1122
-    2211bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb1122
-    2211bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb1122
-    221111bbbb11111111111111111111bbbb111122
-    221111bbbb11111111111111111111bbbb111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2222222222222222222222222222222222222222
-    2222222222222222222222222222222222222222
-    `)
-anim.addAnimationFrame(img`
-    2222222222222222222222222222222222222222
-    2222222222222222222222222222222222222222
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    221111ff11111111ff1111111fffffffff111122
-    22111f22f111111f22f11111f222222222f11122
-    22111f22f111111f22f1111f2222222222f11122
-    22111f22f111111f22f1111f2222222222f11122
-    22111f22f111111f22f1111f2222ffffff111122
-    221111f22f1111f22f11111f222f111111111122
-    2211ccf22fccccf22fcccccf222fcccccccc1122
-    2211ccf22fccccf22fcccccf222fcccccccc1122
-    2211cccf22fccf22fccccccf222fcccccccc1122
-    2211cccf22fccf22fccccccf2222fffffccc1122
-    2211cccf22fccf22fccccccf222222222fcc1122
-    2211cccf22fccf22fccccccf2222222222fc1122
-    2211ccccf22ff22fccccccccf222222222fc1122
-    22111111f22ff22f111111111fffff2222f11122
-    22111111f22ff22f11111111111111f222f11122
-    221111111f2222f111111111111111f222f11122
-    221111111f2222f111111111ffffff2222f11122
-    221111111f2222f11111111f2222222222f11122
-    221111111f2222f11111111f2222222222f11122
-    2211111111f22f111111111f222222222f111122
-    22111111111ff11111111111fffffffff1111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2222222222222222222222222222222222222222
-    2222222222222222222222222222222222222222
-    `)
-animation.attachAnimation(mySprite, anim)
-animation.attachAnimation(mySprite2, anim)
-animation.attachAnimation(mySprite3, anim)
-animation.setAction(mySprite2, ActionKind.roulette_spin)
-pause(500)
-animation.setAction(mySprite, ActionKind.roulette_spin)
-pause(500)
-animation.setAction(mySprite3, ActionKind.roulette_spin)
-anim = animation.createAnimation(ActionKind.roulette_coin, 100)
-anim.addAnimationFrame(img`
-    2222222222222222222222222222222222222222
-    2222222222222222222222222222222222222222
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    22111111111111cccccccccccc11111111111122
-    221111111111cc555555555555cc111111111122
-    2211111111cc5555555555555555cc1111111122
-    221111111c5555555cccccc5555555c111111122
-    22111111c55555555c5555c55555555c11111122
-    2211111c555555555c5555c555555555c1111122
-    221111c5555555555c5555c5555555555c111122
-    221111c5555555555c5555c5555555555c111122
-    22111c55555555555c5555c55555555555c11122
-    22111c55555555555c5555c55555555555c11122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    2211c555555555555c5555c555555555555c1122
-    22111c55555555555c5555c55555555555c11122
-    22111c55555555555c5555c55555555555c11122
-    221111c5555555555c5555c5555555555c111122
-    221111c5555555555c5555c5555555555c111122
-    2211111c555555555c5555c555555555c1111122
-    22111111c55555555c5555c55555555c11111122
-    221111111c5555555cccccc5555555c111111122
-    2211111111cc5555555555555555cc1111111122
-    221111111111cc555555555555cc111111111122
-    22111111111111cccccccccccc11111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2222222222222222222222222222222222222222
-    2222222222222222222222222222222222222222
-    `)
-animation.attachAnimation(mySprite, anim)
-animation.attachAnimation(mySprite2, anim)
-animation.attachAnimation(mySprite3, anim)
-anim = animation.createAnimation(ActionKind.roulette_skull, 100)
-anim.addAnimationFrame(img`
-    2222222222222222222222222222222222222222
-    2222222222222222222222222222222222222222
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111ffffffffffffffffffffffffff1111122
-    221111f11111111111111111111111111f111122
-    22111f1111111111111111111111111111f11122
-    2211f111111111111111111111111111111f1122
-    2211f1111fffff111111111111fffff1111f1122
-    2211f111f11111f1111111111f11111f111f1122
-    2211f111f11111f1111111111f11111f111f1122
-    2211f111f11111f1111111111f11111f111f1122
-    2211f111f11111f1111111111f11111f111f1122
-    2211f111f11111f1111111111f11111f111f1122
-    2211f1111fffff111111111111fffff1111f1122
-    2211f111111111111111111111111111111f1122
-    2211f111111111111111111111111111111f1122
-    2211f111111111111111111111111111111f1122
-    2211f111111111111111111111111111111f1122
-    22111f1111111111111111111111111111f11122
-    221111f111111ff1111ff1111ff111111f111122
-    2211111ff111f11f11f11f11f11f111ff1111122
-    221111111f11f11f11f11f11f11f11f111111122
-    221111111f11f11f11f11f11f11f11f111111122
-    221111111f11f11f11f11f11f11f11f111111122
-    221111111f11f11f11f11f11f11f11f111111122
-    221111111f11f11f11f11f11f11f11f111111122
-    221111111f11f11f11f11f11f11f11f111111122
-    221111111f11f11f11f11f11f11f11f111111122
-    221111111f11f11f11f11f11f11f11f111111122
-    2211111111ff1111ff1111ff1111ff1111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2222222222222222222222222222222222222222
-    2222222222222222222222222222222222222222
-    `)
-animation.attachAnimation(mySprite, anim)
-animation.attachAnimation(mySprite2, anim)
-animation.attachAnimation(mySprite3, anim)
-anim = animation.createAnimation(ActionKind.roulette_chest, 100)
-anim.addAnimationFrame(img`
-    2222222222222222222222222222222222222222
-    2222222222222222222222222222222222222222
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    22111111bbbbbbbbbbbbbbbbbbbbbbbb11111122
-    22111111bbbbbbbbbbbbbbbbbbbbbbbb11111122
-    221111bbee44444444444444444444eebb111122
-    221111bbee44444444444444444444eebb111122
-    2211bbee444444444444444444444444eebb1122
-    2211bbee444444444444444444444444eebb1122
-    2211bbee444444444444444444444444eebb1122
-    2211bbee444444444444444444444444eebb1122
-    2211bbee444444444444444444444444eebb1122
-    2211bbee444444444444444444444444eebb1122
-    2211bbeeee44444444444444444444eeeebb1122
-    2211bbeeee44444444444444444444eeeebb1122
-    2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
-    2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
-    2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
-    2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
-    2211bbbbbbbbbbbbbbddddbbbbbbbbbbbbbb1122
-    2211bbbbbbbbbbbbbbddddbbbbbbbbbbbbbb1122
-    2211ccbbbbbbbbbbbbccccbbbbbbbbbbbbcc1122
-    2211ccbbbbbbbbbbbbccccbbbbbbbbbbbbcc1122
-    2211ccccccccccccbbccccbbcccccccccccc1122
-    2211ccccccccccccbbccccbbcccccccccccc1122
-    2211bbeeeeeeeeeeccbbbbcceeeeeeeeeebb1122
-    2211bbeeeeeeeeeeccbbbbcceeeeeeeeeebb1122
-    2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
-    2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
-    2211bbcceeeeeeeeeeeeeeeeeeeeeeeeccbb1122
-    2211bbcceeeeeeeeeeeeeeeeeeeeeeeeccbb1122
-    2211bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb1122
-    2211bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb1122
-    221111bbbb11111111111111111111bbbb111122
-    221111bbbb11111111111111111111bbbb111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2222222222222222222222222222222222222222
-    2222222222222222222222222222222222222222
-    `)
-animation.attachAnimation(mySprite, anim)
-animation.attachAnimation(mySprite2, anim)
-animation.attachAnimation(mySprite3, anim)
-anim = animation.createAnimation(ActionKind.roulette_boss, 100)
-anim.addAnimationFrame(img`
-    2222222222222222222222222222222222222222
-    2222222222222222222222222222222222222222
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    221111ff11111111ff1111111fffffffff111122
-    22111f22f111111f22f11111f222222222f11122
-    22111f22f111111f22f1111f2222222222f11122
-    22111f22f111111f22f1111f2222222222f11122
-    22111f22f111111f22f1111f2222ffffff111122
-    221111f22f1111f22f11111f222f111111111122
-    2211ccf22fccccf22fcccccf222fcccccccc1122
-    2211ccf22fccccf22fcccccf222fcccccccc1122
-    2211cccf22fccf22fccccccf222fcccccccc1122
-    2211cccf22fccf22fccccccf2222fffffccc1122
-    2211cccf22fccf22fccccccf222222222fcc1122
-    2211cccf22fccf22fccccccf2222222222fc1122
-    2211ccccf22ff22fccccccccf222222222fc1122
-    22111111f22ff22f111111111fffff2222f11122
-    22111111f22ff22f11111111111111f222f11122
-    221111111f2222f111111111111111f222f11122
-    221111111f2222f111111111ffffff2222f11122
-    221111111f2222f11111111f2222222222f11122
-    221111111f2222f11111111f2222222222f11122
-    2211111111f22f111111111f222222222f111122
-    22111111111ff11111111111fffffffff1111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2211111111111111111111111111111111111122
-    2222222222222222222222222222222222222222
-    2222222222222222222222222222222222222222
-    `)
-animation.attachAnimation(mySprite, anim)
-animation.attachAnimation(mySprite2, anim)
-animation.attachAnimation(mySprite3, anim)
+if (!(boss)) {
+    anim = animation.createAnimation(ActionKind.roulette_spin, 100)
+    anim.addAnimationFrame(img`
+        2222222222222222222222222222222222222222
+        2222222222222222222222222222222222222222
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        22111111111111cccccccccccc11111111111122
+        221111111111cc555555555555cc111111111122
+        2211111111cc5555555555555555cc1111111122
+        221111111c5555555cccccc5555555c111111122
+        22111111c55555555c5555c55555555c11111122
+        2211111c555555555c5555c555555555c1111122
+        221111c5555555555c5555c5555555555c111122
+        221111c5555555555c5555c5555555555c111122
+        22111c55555555555c5555c55555555555c11122
+        22111c55555555555c5555c55555555555c11122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        22111c55555555555c5555c55555555555c11122
+        22111c55555555555c5555c55555555555c11122
+        221111c5555555555c5555c5555555555c111122
+        221111c5555555555c5555c5555555555c111122
+        2211111c555555555c5555c555555555c1111122
+        22111111c55555555c5555c55555555c11111122
+        221111111c5555555cccccc5555555c111111122
+        2211111111cc5555555555555555cc1111111122
+        221111111111cc555555555555cc111111111122
+        22111111111111cccccccccccc11111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2222222222222222222222222222222222222222
+        2222222222222222222222222222222222222222
+        `)
+    anim.addAnimationFrame(img`
+        2222222222222222222222222222222222222222
+        2222222222222222222222222222222222222222
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111ffffffffffffffffffffffffff1111122
+        221111f11111111111111111111111111f111122
+        22111f1111111111111111111111111111f11122
+        2211f111111111111111111111111111111f1122
+        2211f1111fffff111111111111fffff1111f1122
+        2211f111f11111f1111111111f11111f111f1122
+        2211f111f11111f1111111111f11111f111f1122
+        2211f111f11111f1111111111f11111f111f1122
+        2211f111f11111f1111111111f11111f111f1122
+        2211f111f11111f1111111111f11111f111f1122
+        2211f1111fffff111111111111fffff1111f1122
+        2211f111111111111111111111111111111f1122
+        2211f111111111111111111111111111111f1122
+        2211f111111111111111111111111111111f1122
+        2211f111111111111111111111111111111f1122
+        22111f1111111111111111111111111111f11122
+        221111f111111ff1111ff1111ff111111f111122
+        2211111ff111f11f11f11f11f11f111ff1111122
+        221111111f11f11f11f11f11f11f11f111111122
+        221111111f11f11f11f11f11f11f11f111111122
+        221111111f11f11f11f11f11f11f11f111111122
+        221111111f11f11f11f11f11f11f11f111111122
+        221111111f11f11f11f11f11f11f11f111111122
+        221111111f11f11f11f11f11f11f11f111111122
+        221111111f11f11f11f11f11f11f11f111111122
+        221111111f11f11f11f11f11f11f11f111111122
+        2211111111ff1111ff1111ff1111ff1111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2222222222222222222222222222222222222222
+        2222222222222222222222222222222222222222
+        `)
+    anim.addAnimationFrame(img`
+        2222222222222222222222222222222222222222
+        2222222222222222222222222222222222222222
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        22111111bbbbbbbbbbbbbbbbbbbbbbbb11111122
+        22111111bbbbbbbbbbbbbbbbbbbbbbbb11111122
+        221111bbee44444444444444444444eebb111122
+        221111bbee44444444444444444444eebb111122
+        2211bbee444444444444444444444444eebb1122
+        2211bbee444444444444444444444444eebb1122
+        2211bbee444444444444444444444444eebb1122
+        2211bbee444444444444444444444444eebb1122
+        2211bbee444444444444444444444444eebb1122
+        2211bbee444444444444444444444444eebb1122
+        2211bbeeee44444444444444444444eeeebb1122
+        2211bbeeee44444444444444444444eeeebb1122
+        2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
+        2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
+        2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
+        2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
+        2211bbbbbbbbbbbbbbddddbbbbbbbbbbbbbb1122
+        2211bbbbbbbbbbbbbbddddbbbbbbbbbbbbbb1122
+        2211ccbbbbbbbbbbbbccccbbbbbbbbbbbbcc1122
+        2211ccbbbbbbbbbbbbccccbbbbbbbbbbbbcc1122
+        2211ccccccccccccbbccccbbcccccccccccc1122
+        2211ccccccccccccbbccccbbcccccccccccc1122
+        2211bbeeeeeeeeeeccbbbbcceeeeeeeeeebb1122
+        2211bbeeeeeeeeeeccbbbbcceeeeeeeeeebb1122
+        2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
+        2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
+        2211bbcceeeeeeeeeeeeeeeeeeeeeeeeccbb1122
+        2211bbcceeeeeeeeeeeeeeeeeeeeeeeeccbb1122
+        2211bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb1122
+        2211bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb1122
+        221111bbbb11111111111111111111bbbb111122
+        221111bbbb11111111111111111111bbbb111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2222222222222222222222222222222222222222
+        2222222222222222222222222222222222222222
+        `)
+    anim.addAnimationFrame(img`
+        2222222222222222222222222222222222222222
+        2222222222222222222222222222222222222222
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        221111ff11111111ff1111111fffffffff111122
+        22111f22f111111f22f11111f222222222f11122
+        22111f22f111111f22f1111f2222222222f11122
+        22111f22f111111f22f1111f2222222222f11122
+        22111f22f111111f22f1111f2222ffffff111122
+        221111f22f1111f22f11111f222f111111111122
+        2211ccf22fccccf22fcccccf222fcccccccc1122
+        2211ccf22fccccf22fcccccf222fcccccccc1122
+        2211cccf22fccf22fccccccf222fcccccccc1122
+        2211cccf22fccf22fccccccf2222fffffccc1122
+        2211cccf22fccf22fccccccf222222222fcc1122
+        2211cccf22fccf22fccccccf2222222222fc1122
+        2211ccccf22ff22fccccccccf222222222fc1122
+        22111111f22ff22f111111111fffff2222f11122
+        22111111f22ff22f11111111111111f222f11122
+        221111111f2222f111111111111111f222f11122
+        221111111f2222f111111111ffffff2222f11122
+        221111111f2222f11111111f2222222222f11122
+        221111111f2222f11111111f2222222222f11122
+        2211111111f22f111111111f222222222f111122
+        22111111111ff11111111111fffffffff1111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2222222222222222222222222222222222222222
+        2222222222222222222222222222222222222222
+        `)
+    animation.attachAnimation(mySprite, anim)
+    animation.attachAnimation(mySprite2, anim)
+    animation.attachAnimation(mySprite3, anim)
+    animation.setAction(mySprite2, ActionKind.roulette_spin)
+    pause(500)
+    animation.setAction(mySprite, ActionKind.roulette_spin)
+    pause(500)
+    animation.setAction(mySprite3, ActionKind.roulette_spin)
+    anim = animation.createAnimation(ActionKind.roulette_coin, 100)
+    anim.addAnimationFrame(img`
+        2222222222222222222222222222222222222222
+        2222222222222222222222222222222222222222
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        22111111111111cccccccccccc11111111111122
+        221111111111cc555555555555cc111111111122
+        2211111111cc5555555555555555cc1111111122
+        221111111c5555555cccccc5555555c111111122
+        22111111c55555555c5555c55555555c11111122
+        2211111c555555555c5555c555555555c1111122
+        221111c5555555555c5555c5555555555c111122
+        221111c5555555555c5555c5555555555c111122
+        22111c55555555555c5555c55555555555c11122
+        22111c55555555555c5555c55555555555c11122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        2211c555555555555c5555c555555555555c1122
+        22111c55555555555c5555c55555555555c11122
+        22111c55555555555c5555c55555555555c11122
+        221111c5555555555c5555c5555555555c111122
+        221111c5555555555c5555c5555555555c111122
+        2211111c555555555c5555c555555555c1111122
+        22111111c55555555c5555c55555555c11111122
+        221111111c5555555cccccc5555555c111111122
+        2211111111cc5555555555555555cc1111111122
+        221111111111cc555555555555cc111111111122
+        22111111111111cccccccccccc11111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2222222222222222222222222222222222222222
+        2222222222222222222222222222222222222222
+        `)
+    animation.attachAnimation(mySprite, anim)
+    animation.attachAnimation(mySprite2, anim)
+    animation.attachAnimation(mySprite3, anim)
+    anim = animation.createAnimation(ActionKind.roulette_skull, 100)
+    anim.addAnimationFrame(img`
+        2222222222222222222222222222222222222222
+        2222222222222222222222222222222222222222
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111ffffffffffffffffffffffffff1111122
+        221111f11111111111111111111111111f111122
+        22111f1111111111111111111111111111f11122
+        2211f111111111111111111111111111111f1122
+        2211f1111fffff111111111111fffff1111f1122
+        2211f111f11111f1111111111f11111f111f1122
+        2211f111f11111f1111111111f11111f111f1122
+        2211f111f11111f1111111111f11111f111f1122
+        2211f111f11111f1111111111f11111f111f1122
+        2211f111f11111f1111111111f11111f111f1122
+        2211f1111fffff111111111111fffff1111f1122
+        2211f111111111111111111111111111111f1122
+        2211f111111111111111111111111111111f1122
+        2211f111111111111111111111111111111f1122
+        2211f111111111111111111111111111111f1122
+        22111f1111111111111111111111111111f11122
+        221111f111111ff1111ff1111ff111111f111122
+        2211111ff111f11f11f11f11f11f111ff1111122
+        221111111f11f11f11f11f11f11f11f111111122
+        221111111f11f11f11f11f11f11f11f111111122
+        221111111f11f11f11f11f11f11f11f111111122
+        221111111f11f11f11f11f11f11f11f111111122
+        221111111f11f11f11f11f11f11f11f111111122
+        221111111f11f11f11f11f11f11f11f111111122
+        221111111f11f11f11f11f11f11f11f111111122
+        221111111f11f11f11f11f11f11f11f111111122
+        2211111111ff1111ff1111ff1111ff1111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2222222222222222222222222222222222222222
+        2222222222222222222222222222222222222222
+        `)
+    animation.attachAnimation(mySprite, anim)
+    animation.attachAnimation(mySprite2, anim)
+    animation.attachAnimation(mySprite3, anim)
+    anim = animation.createAnimation(ActionKind.roulette_chest, 100)
+    anim.addAnimationFrame(img`
+        2222222222222222222222222222222222222222
+        2222222222222222222222222222222222222222
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        22111111bbbbbbbbbbbbbbbbbbbbbbbb11111122
+        22111111bbbbbbbbbbbbbbbbbbbbbbbb11111122
+        221111bbee44444444444444444444eebb111122
+        221111bbee44444444444444444444eebb111122
+        2211bbee444444444444444444444444eebb1122
+        2211bbee444444444444444444444444eebb1122
+        2211bbee444444444444444444444444eebb1122
+        2211bbee444444444444444444444444eebb1122
+        2211bbee444444444444444444444444eebb1122
+        2211bbee444444444444444444444444eebb1122
+        2211bbeeee44444444444444444444eeeebb1122
+        2211bbeeee44444444444444444444eeeebb1122
+        2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
+        2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
+        2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
+        2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
+        2211bbbbbbbbbbbbbbddddbbbbbbbbbbbbbb1122
+        2211bbbbbbbbbbbbbbddddbbbbbbbbbbbbbb1122
+        2211ccbbbbbbbbbbbbccccbbbbbbbbbbbbcc1122
+        2211ccbbbbbbbbbbbbccccbbbbbbbbbbbbcc1122
+        2211ccccccccccccbbccccbbcccccccccccc1122
+        2211ccccccccccccbbccccbbcccccccccccc1122
+        2211bbeeeeeeeeeeccbbbbcceeeeeeeeeebb1122
+        2211bbeeeeeeeeeeccbbbbcceeeeeeeeeebb1122
+        2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
+        2211bbeeeeeeeeeeeeeeeeeeeeeeeeeeeebb1122
+        2211bbcceeeeeeeeeeeeeeeeeeeeeeeeccbb1122
+        2211bbcceeeeeeeeeeeeeeeeeeeeeeeeccbb1122
+        2211bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb1122
+        2211bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb1122
+        221111bbbb11111111111111111111bbbb111122
+        221111bbbb11111111111111111111bbbb111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2222222222222222222222222222222222222222
+        2222222222222222222222222222222222222222
+        `)
+    animation.attachAnimation(mySprite, anim)
+    animation.attachAnimation(mySprite2, anim)
+    animation.attachAnimation(mySprite3, anim)
+    anim = animation.createAnimation(ActionKind.roulette_boss, 100)
+    anim.addAnimationFrame(img`
+        2222222222222222222222222222222222222222
+        2222222222222222222222222222222222222222
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        221111ff11111111ff1111111fffffffff111122
+        22111f22f111111f22f11111f222222222f11122
+        22111f22f111111f22f1111f2222222222f11122
+        22111f22f111111f22f1111f2222222222f11122
+        22111f22f111111f22f1111f2222ffffff111122
+        221111f22f1111f22f11111f222f111111111122
+        2211ccf22fccccf22fcccccf222fcccccccc1122
+        2211ccf22fccccf22fcccccf222fcccccccc1122
+        2211cccf22fccf22fccccccf222fcccccccc1122
+        2211cccf22fccf22fccccccf2222fffffccc1122
+        2211cccf22fccf22fccccccf222222222fcc1122
+        2211cccf22fccf22fccccccf2222222222fc1122
+        2211ccccf22ff22fccccccccf222222222fc1122
+        22111111f22ff22f111111111fffff2222f11122
+        22111111f22ff22f11111111111111f222f11122
+        221111111f2222f111111111111111f222f11122
+        221111111f2222f111111111ffffff2222f11122
+        221111111f2222f11111111f2222222222f11122
+        221111111f2222f11111111f2222222222f11122
+        2211111111f22f111111111f222222222f111122
+        22111111111ff11111111111fffffffff1111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2211111111111111111111111111111111111122
+        2222222222222222222222222222222222222222
+        2222222222222222222222222222222222222222
+        `)
+    animation.attachAnimation(mySprite, anim)
+    animation.attachAnimation(mySprite2, anim)
+    animation.attachAnimation(mySprite3, anim)
+}
 readyforpull = true
 while (!(Ingame)) {
     pause(100)
@@ -1510,3 +1621,14 @@ blockSettings.writeNumber("Round", blockSettings.readNumber("Round") + 1)
 blockSettings.writeNumber("hp", info.life())
 blockSettings.writeNumber("coins", info.score())
 game.reset()
+forever(function () {
+    if (boss && Ingame) {
+        for (let index = 0; index <= 9; index++) {
+            if (sprites.allOfKind(SpriteKind.Enemy)[index].vx > 0) {
+                animation.setAction(sprites.allOfKind(SpriteKind.Enemy)[index], ActionKind.boss_right)
+            } else {
+                animation.setAction(sprites.allOfKind(SpriteKind.Enemy)[index], ActionKind.boss_left)
+            }
+        }
+    }
+})
