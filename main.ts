@@ -56,19 +56,46 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.damaging, function (sprite, other
             ........dddddddddddddddd........
             ..........dddddddddddd..........
             `)) {
-            statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, sprite).value += -1
+            if (boss) {
+                boss_bar.value += -0.25
+            } else {
+                if (!(blockSettings.readNumber("boss next") == 1)) {
+                    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, sprite).value += -1
+                }
+            }
         }
     } else if (sprites.readDataString(otherSprite, "type") == "blaster") {
         otherSprite.destroy()
-        statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, sprite).value += -3
+        if (boss) {
+            boss_bar.value += -20
+        } else {
+            if (!(blockSettings.readNumber("boss next") == 1)) {
+                statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, sprite).value += -3
+            }
+        }
     } else if (sprites.readDataString(otherSprite, "type") == "launcher") {
-        statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, sprite).value += -0.5
+        if (boss) {
+            boss_bar.value += -0.25
+        } else {
+            if (!(blockSettings.readNumber("boss next") == 1)) {
+                statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, sprite).value += -0.5
+            }
+        }
     } else if (sprites.readDataString(otherSprite, "type") == "launcher+") {
-        statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, sprite).value += -1
+        if (boss) {
+            boss_bar.value += -0.5
+        } else {
+            if (!(blockSettings.readNumber("boss next") == 1)) {
+                statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, sprite).value += -1
+            }
+        }
     }
 })
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     direction = 1
+})
+statusbars.onZero(StatusBarKind.BossHealth, function (status) {
+    boss = false
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (readyforpull) {
@@ -196,6 +223,10 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
                 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
                 `)
+            if (numofpulls < 3) {
+                music.playTone(294, music.beat(BeatFraction.Quarter))
+                music.playTone(349, music.beat(BeatFraction.Quarter))
+            }
             Pulltype = randint(1, 4)
             if (numofpulls == 0) {
                 pull1 = Pulltype
@@ -428,33 +459,34 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                         . . c c 6 6 7 1 1 1 1 1 6 c . . 
                         . . . c c c c c c c c c c . . . 
                         `)
-                    mySprite6 = sprites.create(img`
-                        . . . c c c c c c . . . . . . . 
-                        . . c 6 7 7 7 7 6 c . . . . . . 
-                        . c 7 7 7 7 7 7 7 7 c . . . . . 
-                        c 6 7 7 7 7 7 7 7 7 6 c . . . . 
-                        c 7 c 6 6 6 6 c 7 7 7 c . . . . 
-                        f 7 6 f 6 6 f 6 7 7 7 f . . . . 
-                        f 7 7 7 7 7 7 7 7 7 7 f . . . . 
-                        . f 7 7 7 7 6 c 7 7 6 f . . . . 
-                        . . f c c c c 7 7 6 f c c c . . 
-                        . . c 6 2 7 7 7 f c c 7 7 7 c . 
-                        . c 6 7 7 2 7 7 c f 6 7 7 7 7 c 
-                        . c 1 1 1 1 7 6 6 c 6 6 6 c c c 
-                        . c 1 1 1 1 1 6 6 6 6 6 6 c . . 
-                        . c 6 1 1 1 1 1 6 6 6 6 6 c . . 
-                        . . c 6 1 1 1 1 1 7 6 6 c c . . 
-                        . . . c c c c c c c c c c . . . 
+                    boss_sprite = sprites.create(img`
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
                         `, SpriteKind.Boss)
-                    animation.attachAnimation(mySprite6, anim)
-                    animation.attachAnimation(mySprite6, anim2)
-                    statusbar = statusbars.create(160, 6, StatusBarKind.BossHealth)
-                    statusbar.max = 10
-                    statusbar.value = 10
-                    statusbar.setColor(2, 15)
-                    statusbar.setBarBorder(1, 15)
-                    statusbar.y = 3
-                    for (let index = 0; index < 10; index++) {
+                    boss_bar = statusbars.create(120, 6, StatusBarKind.BossHealth)
+                    boss_bar.max = 300
+                    boss_bar.value = 300
+                    boss_bar.setColor(2, 15, 4)
+                    boss_bar.setBarBorder(1, 15)
+                    boss_bar.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
+                    boss_bar.y = 3
+                    boss_bar.x = 90
+                    spritetofollow = boss_sprite
+                    for (let index = 0; index < 20; index++) {
                         mySprite6 = sprites.create(img`
                             . . . c c c c c c . . . . . . . 
                             . . c 6 7 7 7 7 6 c . . . . . . 
@@ -475,12 +507,8 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                             `, SpriteKind.Enemy)
                         animation.attachAnimation(mySprite6, anim)
                         animation.attachAnimation(mySprite6, anim2)
-                        statusbar = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
-                        statusbar.max = 15
-                        statusbar.value = 15
-                        statusbar.attachToSprite(mySprite6)
-                        statusbar.setColor(2, 15)
-                        statusbar.setBarBorder(1, 15)
+                        mySprite6.follow(spritetofollow)
+                        spritetofollow = mySprite6
                     }
                 } else {
                     mySprite6 = sprites.create(img`
@@ -860,12 +888,13 @@ info.onLifeZero(function () {
             blockSettings.writeNumber("coins", info.score() - 100)
         } else {
             blockSettings.clear()
+            game.reset()
         }
     } else {
         game.splash("GAME OVER!")
         blockSettings.clear()
+        game.reset()
     }
-    game.reset()
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (damagable) {
@@ -880,7 +909,7 @@ let mySprite9: Sprite = null
 let mySprite8: Sprite = null
 let mySprite7: Sprite = null
 let statusbar: StatusBarSprite = null
-let mySprite6: Sprite = null
+let spritetofollow: Sprite = null
 let anim2: animation.Animation = null
 let mySprite5: Sprite = null
 let mySprite4: Sprite = null
@@ -888,19 +917,24 @@ let pull3 = 0
 let pull2 = 0
 let pull1 = 0
 let Pulltype = 0
+let boss_bar: StatusBarSprite = null
 let weapontype = 0
+let mySprite6: Sprite = null
+let boss_sprite: Sprite = null
 let anim: animation.Animation = null
 let mySprite3: Sprite = null
 let mySprite2: Sprite = null
 let mySprite: Sprite = null
 let direction = 0
 let numofpulls = 0
+let numofchest = 0
 let numofskull = 0
 let numofcoin = 0
 let Ingame = false
 let readyforpull = false
 let damagable = false
 let boss = false
+blockSettings.writeNumber("boss next", 1)
 if (!(blockSettings.exists("Round"))) {
     blockSettings.writeNumber("Round", 1)
 }
@@ -929,7 +963,11 @@ readyforpull = false
 Ingame = false
 numofcoin = 0
 numofskull = 0
-let numofchest = 0
+if (boss) {
+    numofchest = 3
+} else {
+    numofchest = 0
+}
 let numofvs = 0
 if (boss) {
     numofpulls = 3
@@ -1554,13 +1592,35 @@ readyforpull = true
 while (!(Ingame)) {
     pause(100)
 }
-while (!(sprites.allOfKind(SpriteKind.Enemy).length == 0)) {
-    pause(100)
+if (boss) {
+    while (boss) {
+        pause(100)
+        boss_sprite.setVelocity(-100, 0)
+        pause(100)
+        while (!(mySprite6.tileKindAt(TileDirection.Left, assets.tile`myTile1`))) {
+            pause(100)
+        }
+        tiles.placeOnRandomTile(boss_sprite, assets.tile`myTile1`)
+        boss_sprite.setVelocity(100, 0)
+        pause(100)
+        while (!(mySprite6.tileKindAt(TileDirection.Right, assets.tile`myTile2`))) {
+            pause(100)
+        }
+        tiles.placeOnRandomTile(boss_sprite, assets.tile`myTile2`)
+    }
+} else {
+    while (!(sprites.allOfKind(SpriteKind.Enemy).length == 0)) {
+        pause(100)
+    }
 }
 pause(1000)
+if (numofchest > 0) {
+    music.playTone(392, music.beat(BeatFraction.Half))
+}
 if (numofchest == 1) {
     if (game.ask("Treasure!", "10 coins")) {
         info.changeScoreBy(10)
+        music.baDing.play()
     }
 }
 if (numofchest == 2) {
@@ -1569,21 +1629,25 @@ if (numofchest == 2) {
         if (game.ask("Treasure!", "Sword plus 15 coins")) {
             blockSettings.writeNumber("Weapon", 1)
             info.changeScoreBy(15)
+            music.baDing.play()
         }
     } else if (weapontype == 2) {
         if (game.ask("Treasure!", "Blaster plus 15 coins")) {
             blockSettings.writeNumber("Weapon", 2)
             info.changeScoreBy(15)
+            music.baDing.play()
         }
     } else if (weapontype == 3) {
         if (game.ask("Treasure!", "Launcher plus 10 coins")) {
             blockSettings.writeNumber("Weapon", 3)
             info.changeScoreBy(15)
+            music.baDing.play()
         }
     } else if (weapontype == 4) {
         if (game.ask("Treasure!", "5 hp plus 10 coins")) {
             info.changeLifeBy(5)
             info.changeScoreBy(15)
+            music.baDing.play()
         }
     }
 }
@@ -1593,21 +1657,26 @@ if (numofchest == 3) {
         if (game.ask("Treasure!", "Mega Sword plus 30 coins")) {
             blockSettings.writeNumber("Weapon", 4)
             info.changeScoreBy(30)
+            music.magicWand.play()
         }
     } else if (weapontype == 2) {
         if (game.ask("Treasure!", "Mega Blaster plus 30 coins")) {
             blockSettings.writeNumber("Weapon", 5)
             info.changeScoreBy(30)
+            music.magicWand.play()
         }
     } else if (weapontype == 3) {
         if (game.ask("Treasure!", "Mega Launcher plus 30 coins")) {
             blockSettings.writeNumber("Weapon", 6)
             info.changeScoreBy(30)
+            music.magicWand.play()
         }
     }
 }
 pause(1000)
+blockSettings.writeNumber("boss next", 1)
 if (numofvs > 0 && info.score() >= 100) {
+    music.playTone(392, music.beat(BeatFraction.Half))
     if (game.ask("Boss might Appear: " + convertToText(33 * numofvs) + "%", "fight? cost: 100")) {
         info.changeScoreBy(-100)
         if (Math.percentChance(33 * numofvs)) {
@@ -1615,20 +1684,10 @@ if (numofvs > 0 && info.score() >= 100) {
         }
     }
 } else {
+    music.playTone(392, music.beat(BeatFraction.Half))
     game.splash("Next Round!")
 }
 blockSettings.writeNumber("Round", blockSettings.readNumber("Round") + 1)
 blockSettings.writeNumber("hp", info.life())
 blockSettings.writeNumber("coins", info.score())
 game.reset()
-forever(function () {
-    if (boss && Ingame) {
-        for (let index = 0; index <= 9; index++) {
-            if (sprites.allOfKind(SpriteKind.Enemy)[index].vx > 0) {
-                animation.setAction(sprites.allOfKind(SpriteKind.Enemy)[index], ActionKind.boss_right)
-            } else {
-                animation.setAction(sprites.allOfKind(SpriteKind.Enemy)[index], ActionKind.boss_left)
-            }
-        }
-    }
-})
