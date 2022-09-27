@@ -1380,7 +1380,9 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                     } else if (direction == 4) {
                         mySprite9.setVelocity(-100, 0)
                     }
-                    pause(1500)
+                    pause(1000)
+                    mySprite9.destroy()
+                    pause(500)
                     readyforpull = true
                 } else if (blockSettings.readNumber("Weapon") == 8 || blockSettings.readNumber("Weapon") == 10) {
                     readyforpull = false
@@ -1434,7 +1436,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                     } else if (direction == 4) {
                         mySprite9.setVelocity(-100, 0)
                     }
-                    pause(500)
+                    pause(600)
                     readyforpull = true
                 }
             }
@@ -1645,6 +1647,7 @@ controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 info.onLifeZero(function () {
     damagable = false
+    tiles.placeOnRandomTile(mySprite4, assets.tile`myTile0`)
     if (info.score() >= 100) {
         if (game.ask("GAME OVER!", "continue? cost: 100")) {
             blockSettings.writeNumber("hp", 10)
@@ -1704,7 +1707,12 @@ let pull1 = 0
 let Pulltype = 0
 let mySprite10: Sprite = null
 let boss_bar: StatusBarSprite = null
+let upgrade_string = ""
+let weapon_string = ""
+let upgrade_cost = 0
+let weapon_cost = 0
 let weapon_item = 0
+let hp_cost = 0
 let hp_item = 0
 let weapontype = 0
 let mySprite6: Sprite = null
@@ -1758,7 +1766,11 @@ Ingame = false
 numofcoin = 0
 numofskull = 0
 if (boss) {
-    numofchest = 3
+    if (Math.percentChance(20)) {
+        numofchest = 3
+    } else {
+        numofchest = 2
+    }
 } else {
     numofchest = 0
 }
@@ -2682,19 +2694,83 @@ if (numofchest == 3) {
     }
 }
 pause(500)
-if (numofshop > 0 && info.score() >= 100) {
+if (numofshop > 0 && info.score() >= 20) {
     music.playTone(392, music.beat(BeatFraction.Half))
-    if (game.ask("Shop might Appear: " + convertToText(33 * numofshop) + "%", "fight? cost: 100")) {
-        info.changeScoreBy(-100)
+    if (game.ask("Shop might Appear: " + convertToText(16 * numofshop) + "%", "visit?")) {
         if (Math.percentChance(33 * numofshop)) {
             hp_item = randint(2, 10)
-            weapon_item = 0
-            game.splash("Found Shop!", "")
+            hp_cost = randint(8, 15)
+            weapon_item = randint(1, 5)
+            weapon_cost = randint(50, 100)
+            upgrade_cost = randint(100, 200)
+            if (weapon_item == 1) {
+                weapon_string = "sword"
+            } else if (weapon_item == 2) {
+                weapon_string = "blaster"
+            } else if (weapon_item == 3) {
+                weapon_string = "launcher"
+            } else if (weapon_item == 4) {
+                weapon_string = "kaboomer"
+                weapon_item = 7
+            } else if (weapon_item == 5) {
+                weapon_string = "splitshot"
+                weapon_item = 8
+            }
+            if (blockSettings.readNumber("Weapon") == 1) {
+                upgrade_string = "mega sword"
+            } else if (blockSettings.readNumber("Weapon") == 2) {
+                upgrade_string = "mega blaster"
+            } else if (blockSettings.readNumber("Weapon") == 3) {
+                upgrade_string = "mega launcher"
+            } else if (blockSettings.readNumber("Weapon") == 7) {
+                upgrade_string = "mega kaboomer"
+            } else if (blockSettings.readNumber("Weapon") == 8) {
+                upgrade_string = "mega splitshot"
+            } else {
+                upgrade_string = "(not available)"
+            }
+            game.splash("Found Shop!", "" + convertToText(hp_item) + "hp" + " cost: " + convertToText(hp_item * hp_cost) + ", " + ("" + weapon_string + " cost: " + convertToText(weapon_cost)) + ", " + ("upgrade to mega weapon" + " cost: " + convertToText(upgrade_cost)))
+            if (game.ask("" + convertToText(hp_item) + "hp", "cost:" + convertToText(hp_item * hp_cost))) {
+                if (info.score() >= hp_item * hp_cost) {
+                    info.changeScoreBy(hp_item * hp_cost * -1)
+                    info.changeLifeBy(hp_item)
+                } else {
+                    game.splash("NOT ENOUGH COINS!", "you can't buy this!")
+                }
+            }
+            pause(100)
+            if (game.ask(weapon_string, "cost: " + convertToText(weapon_cost))) {
+                if (info.score() >= weapon_cost) {
+                    info.changeScoreBy(weapon_cost * -1)
+                    blockSettings.writeNumber("Weapon", weapon_item)
+                } else {
+                    game.splash("NOT ENOUGH COINS!", "you can't buy this!")
+                }
+                pause(300)
+                if (game.ask("upgrade to mega weapon", "cost: " + convertToText(upgrade_cost))) {
+                    if (info.score() >= upgrade_cost) {
+                        info.changeScoreBy(upgrade_cost * -1)
+                        if (blockSettings.readNumber("Weapon") == 1) {
+                            blockSettings.writeNumber("Weapon", 4)
+                        } else if (blockSettings.readNumber("Weapon") == 2) {
+                            blockSettings.writeNumber("Weapon", 5)
+                        } else if (blockSettings.readNumber("Weapon") == 3) {
+                            blockSettings.writeNumber("Weapon", 6)
+                        } else if (blockSettings.readNumber("Weapon") == 7) {
+                            blockSettings.writeNumber("Weapon", 9)
+                        } else if (blockSettings.readNumber("Weapon") == 8) {
+                            blockSettings.writeNumber("Weapon", 10)
+                        } else {
+                            info.changeScoreBy(upgrade_cost)
+                            game.splash("YOU ALREADY HAVE A MEGA WEAPON!", "you can't upgrade it!")
+                        }
+                    } else {
+                        game.splash("NOT ENOUGH COINS!", "you can't buy this!")
+                    }
+                }
+            }
         }
     }
-} else {
-    music.playTone(392, music.beat(BeatFraction.Half))
-    game.splash("Next Round!")
 }
 pause(500)
 if (blockSettings.readNumber("boss next") == 1) {
