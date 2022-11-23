@@ -2480,6 +2480,7 @@ controller.player2.onButtonEvent(ControllerButton.Right, ControllerButtonEvent.P
 controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
     if (game.ask("RESTART?", "you cannot undo this")) {
         blockSettings.clear()
+        pause(100)
         game.reset()
     }
 })
@@ -2493,6 +2494,7 @@ info.onLifeZero(function () {
             blockSettings.writeNumber("coins", info.score() - 100)
         } else {
             blockSettings.clear()
+            pause(100)
             game.reset()
         }
     } else {
@@ -2500,6 +2502,7 @@ info.onLifeZero(function () {
         	
         }
         blockSettings.clear()
+        pause(100)
         game.reset()
     }
     game.reset()
@@ -3806,6 +3809,7 @@ if (info.life() > 0) {
             music.bigCrash.playUntilDone()
             pause(2000)
             blockSettings.clear()
+            pause(100)
             game.reset()
         } else {
             blockSettings.writeNumber("section", blockSettings.readNumber("section") + 1)
@@ -3828,5 +3832,6 @@ if (info.life() > 0) {
     blockSettings.writeNumber("Round", blockSettings.readNumber("Round") + 1)
     blockSettings.writeNumber("hp", info.life())
     blockSettings.writeNumber("coins", info.score())
+    pause(100)
     game.reset()
 }
