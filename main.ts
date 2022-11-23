@@ -339,8 +339,8 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
                 `, SpriteKind.damaging)
             mySprite5.setPosition(mySprite4.x, mySprite4.y)
             mySprite5.follow(mySprite4, 200)
-            mySprite5.setScale(3.5, ScaleAnchor.Middle)
             sprites.setDataString(mySprite5, "type", "swordsp")
+            mySprite5.setScale(3.5, ScaleAnchor.Middle)
             pause(3000)
             mySprite5.destroy()
         } else if (blockSettings.readNumber("Weapon") == 2 || blockSettings.readNumber("Weapon") == 5) {
@@ -529,19 +529,6 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
                         `, SpriteKind.damaging)
                     mySprite10.setPosition(mySprite4.x, mySprite4.y)
                     sprites.setDataString(mySprite10, "type", "blaster")
-                    mySprite10.setVelocity(-50, 100)
-                    mySprite10 = sprites.create(img`
-                        . . f f f f . . 
-                        . f 4 4 4 1 f . 
-                        f 4 4 4 4 4 1 f 
-                        f 4 4 4 4 4 4 f 
-                        f 4 4 4 4 4 4 f 
-                        f 4 4 4 4 4 4 f 
-                        . f 4 4 4 4 f . 
-                        . . f f f f . . 
-                        `, SpriteKind.damaging)
-                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
-                    sprites.setDataString(mySprite10, "type", "blaster")
                     mySprite10.setVelocity(50, -100)
                     mySprite10 = sprites.create(img`
                         . . f f f f . . 
@@ -555,224 +542,20 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
                         `, SpriteKind.damaging)
                     mySprite10.setPosition(mySprite4.x, mySprite4.y)
                     sprites.setDataString(mySprite10, "type", "blaster")
-                    mySprite10.setVelocity(-50, -100)
-                }
-                if (blockSettings.readNumber("Weapon") == 5) {
-                    for (let index = 0; index < 2; index++) {
-                        pause(100)
-                        if (true) {
-                            mySprite10 = sprites.create(img`
-                                . . f f f f . . 
-                                . f 4 4 4 1 f . 
-                                f 4 4 4 4 4 1 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                . f 4 4 4 4 f . 
-                                . . f f f f . . 
-                                `, SpriteKind.damaging)
-                            mySprite10.setPosition(mySprite4.x, mySprite4.y)
-                            sprites.setDataString(mySprite10, "type", "blaster")
-                            mySprite10.setVelocity(100, 100)
-                            mySprite10 = sprites.create(img`
-                                . . f f f f . . 
-                                . f 4 4 4 1 f . 
-                                f 4 4 4 4 4 1 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                . f 4 4 4 4 f . 
-                                . . f f f f . . 
-                                `, SpriteKind.damaging)
-                            mySprite10.setPosition(mySprite4.x, mySprite4.y)
-                            sprites.setDataString(mySprite10, "type", "blaster")
-                            mySprite10.setVelocity(100, -100)
-                            mySprite10 = sprites.create(img`
-                                . . f f f f . . 
-                                . f 4 4 4 1 f . 
-                                f 4 4 4 4 4 1 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                . f 4 4 4 4 f . 
-                                . . f f f f . . 
-                                `, SpriteKind.damaging)
-                            mySprite10.setPosition(mySprite4.x, mySprite4.y)
-                            sprites.setDataString(mySprite10, "type", "blaster")
-                            mySprite10.setVelocity(-100, -100)
-                            mySprite10 = sprites.create(img`
-                                . . f f f f . . 
-                                . f 4 4 4 1 f . 
-                                f 4 4 4 4 4 1 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                . f 4 4 4 4 f . 
-                                . . f f f f . . 
-                                `, SpriteKind.damaging)
-                            mySprite10.setPosition(mySprite4.x, mySprite4.y)
-                            sprites.setDataString(mySprite10, "type", "blaster")
-                            mySprite10.setVelocity(-100, 100)
-                            mySprite10 = sprites.create(img`
-                                . . f f f f . . 
-                                . f 4 4 4 1 f . 
-                                f 4 4 4 4 4 1 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                . f 4 4 4 4 f . 
-                                . . f f f f . . 
-                                `, SpriteKind.damaging)
-                            mySprite10.setPosition(mySprite4.x, mySprite4.y)
-                            sprites.setDataString(mySprite10, "type", "blaster")
-                            mySprite10.setVelocity(0, 100)
-                            mySprite10 = sprites.create(img`
-                                . . f f f f . . 
-                                . f 4 4 4 1 f . 
-                                f 4 4 4 4 4 1 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                . f 4 4 4 4 f . 
-                                . . f f f f . . 
-                                `, SpriteKind.damaging)
-                            mySprite10.setPosition(mySprite4.x, mySprite4.y)
-                            sprites.setDataString(mySprite10, "type", "blaster")
-                            mySprite10.setVelocity(0, -100)
-                            mySprite10 = sprites.create(img`
-                                . . f f f f . . 
-                                . f 4 4 4 1 f . 
-                                f 4 4 4 4 4 1 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                . f 4 4 4 4 f . 
-                                . . f f f f . . 
-                                `, SpriteKind.damaging)
-                            mySprite10.setPosition(mySprite4.x, mySprite4.y)
-                            sprites.setDataString(mySprite10, "type", "blaster")
-                            mySprite10.setVelocity(-100, 0)
-                            mySprite10 = sprites.create(img`
-                                . . f f f f . . 
-                                . f 4 4 4 1 f . 
-                                f 4 4 4 4 4 1 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                . f 4 4 4 4 f . 
-                                . . f f f f . . 
-                                `, SpriteKind.damaging)
-                            mySprite10.setPosition(mySprite4.x, mySprite4.y)
-                            sprites.setDataString(mySprite10, "type", "blaster")
-                            mySprite10.setVelocity(100, 0)
-                        }
-                        if (true) {
-                            mySprite10 = sprites.create(img`
-                                . . f f f f . . 
-                                . f 4 4 4 1 f . 
-                                f 4 4 4 4 4 1 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                . f 4 4 4 4 f . 
-                                . . f f f f . . 
-                                `, SpriteKind.damaging)
-                            mySprite10.setPosition(mySprite4.x, mySprite4.y)
-                            sprites.setDataString(mySprite10, "type", "blaster")
-                            mySprite10.setVelocity(100, 50)
-                            mySprite10 = sprites.create(img`
-                                . . f f f f . . 
-                                . f 4 4 4 1 f . 
-                                f 4 4 4 4 4 1 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                . f 4 4 4 4 f . 
-                                . . f f f f . . 
-                                `, SpriteKind.damaging)
-                            mySprite10.setPosition(mySprite4.x, mySprite4.y)
-                            sprites.setDataString(mySprite10, "type", "blaster")
-                            mySprite10.setVelocity(100, -50)
-                            mySprite10 = sprites.create(img`
-                                . . f f f f . . 
-                                . f 4 4 4 1 f . 
-                                f 4 4 4 4 4 1 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                . f 4 4 4 4 f . 
-                                . . f f f f . . 
-                                `, SpriteKind.damaging)
-                            mySprite10.setPosition(mySprite4.x, mySprite4.y)
-                            sprites.setDataString(mySprite10, "type", "blaster")
-                            mySprite10.setVelocity(-100, -50)
-                            mySprite10 = sprites.create(img`
-                                . . f f f f . . 
-                                . f 4 4 4 1 f . 
-                                f 4 4 4 4 4 1 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                . f 4 4 4 4 f . 
-                                . . f f f f . . 
-                                `, SpriteKind.damaging)
-                            mySprite10.setPosition(mySprite4.x, mySprite4.y)
-                            sprites.setDataString(mySprite10, "type", "blaster")
-                            mySprite10.setVelocity(-100, 50)
-                            mySprite10 = sprites.create(img`
-                                . . f f f f . . 
-                                . f 4 4 4 1 f . 
-                                f 4 4 4 4 4 1 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                . f 4 4 4 4 f . 
-                                . . f f f f . . 
-                                `, SpriteKind.damaging)
-                            mySprite10.setPosition(mySprite4.x, mySprite4.y)
-                            sprites.setDataString(mySprite10, "type", "blaster")
-                            mySprite10.setVelocity(50, 100)
-                            mySprite10 = sprites.create(img`
-                                . . f f f f . . 
-                                . f 4 4 4 1 f . 
-                                f 4 4 4 4 4 1 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                . f 4 4 4 4 f . 
-                                . . f f f f . . 
-                                `, SpriteKind.damaging)
-                            mySprite10.setPosition(mySprite4.x, mySprite4.y)
-                            sprites.setDataString(mySprite10, "type", "blaster")
-                            mySprite10.setVelocity(-50, 100)
-                            mySprite10 = sprites.create(img`
-                                . . f f f f . . 
-                                . f 4 4 4 1 f . 
-                                f 4 4 4 4 4 1 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                . f 4 4 4 4 f . 
-                                . . f f f f . . 
-                                `, SpriteKind.damaging)
-                            mySprite10.setPosition(mySprite4.x, mySprite4.y)
-                            sprites.setDataString(mySprite10, "type", "blaster")
-                            mySprite10.setVelocity(50, -100)
-                            mySprite10 = sprites.create(img`
-                                . . f f f f . . 
-                                . f 4 4 4 1 f . 
-                                f 4 4 4 4 4 1 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                f 4 4 4 4 4 4 f 
-                                . f 4 4 4 4 f . 
-                                . . f f f f . . 
-                                `, SpriteKind.damaging)
-                            mySprite10.setPosition(mySprite4.x, mySprite4.y)
-                            sprites.setDataString(mySprite10, "type", "blaster")
-                            mySprite10.setVelocity(-50, -100)
-                        }
-                    }
+                    mySprite10.setVelocity(-50, 0)
+                    mySprite10 = sprites.create(img`
+                        . . f f f f . . 
+                        . f 4 4 4 1 f . 
+                        f 4 4 4 4 4 1 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        . f 4 4 4 4 f . 
+                        . . f f f f . . 
+                        `, SpriteKind.damaging)
+                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
+                    sprites.setDataString(mySprite10, "type", "blaster")
+                    mySprite10.setVelocity(50, 0)
                 }
                 pause(1000)
             }
@@ -2787,7 +2570,7 @@ let damagable = false
 let boss = false
 if (!(blockSettings.exists("Round"))) {
     blockSettings.writeNumber("Round", 1)
-    blockSettings.writeNumber("section", 3)
+    blockSettings.writeNumber("section", 1)
     blockSettings.writeNumber("special", 0)
 }
 if (blockSettings.readNumber("section") == 1) {
@@ -3852,7 +3635,7 @@ if (info.life() > 0) {
     if (numofchest == 2) {
         if (blockSettings.readNumber("section") == 1) {
             weapontype = randint(1, 4)
-        } else if (blockSettings.readNumber("section") > 1) {
+        } else if (blockSettings.readNumber("section") == 2) {
             weapontype = randint(1, 6)
         }
         if (weapontype == 1) {
