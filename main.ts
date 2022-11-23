@@ -12,7 +12,9 @@ enum ActionKind {
     boss_left,
     boss_right,
     roulette_shop,
-    roulette_enemy
+    roulette_enemy,
+    roulette_sp1,
+    roulette_sp2
 }
 namespace SpriteKind {
     export const none = SpriteKind.create()
@@ -273,10 +275,637 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.damaging, function (sprite, other
         sprites.setDataString(mySprite10, "type", "blaster")
         mySprite10.setVelocity(100, 0)
         otherSprite.destroy()
+    } else if (sprites.readDataString(otherSprite, "type") == "kaboomersp") {
+        otherSprite.setVelocity(0, 0)
+        otherSprite.setScale(5, ScaleAnchor.Middle)
+        if (boss) {
+            boss_bar.value += -0.25
+        } else {
+            if (!(blockSettings.readNumber("boss next") == 1)) {
+                statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, sprite).value += -0.5
+            }
+        }
+    } else {
+    	
     }
 })
 statusbars.onZero(StatusBarKind.BossHealth, function (status) {
     boss = false
+})
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (blockSettings.readNumber("special") == 10) {
+        statusbars.getStatusBarAttachedTo(StatusBarKind.Magic, mySprite4).value += -10
+        blockSettings.writeNumber("special", 0)
+        if (blockSettings.readNumber("Weapon") == 1 || blockSettings.readNumber("Weapon") == 4) {
+        	
+        } else if (blockSettings.readNumber("Weapon") == 2 || blockSettings.readNumber("Weapon") == 5) {
+            for (let index = 0; index < 5; index++) {
+                if (true) {
+                    mySprite10 = sprites.create(img`
+                        . . f f f f . . 
+                        . f 4 4 4 1 f . 
+                        f 4 4 4 4 4 1 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        . f 4 4 4 4 f . 
+                        . . f f f f . . 
+                        `, SpriteKind.damaging)
+                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
+                    sprites.setDataString(mySprite10, "type", "blaster")
+                    mySprite10.setVelocity(100, 100)
+                    mySprite10 = sprites.create(img`
+                        . . f f f f . . 
+                        . f 4 4 4 1 f . 
+                        f 4 4 4 4 4 1 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        . f 4 4 4 4 f . 
+                        . . f f f f . . 
+                        `, SpriteKind.damaging)
+                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
+                    sprites.setDataString(mySprite10, "type", "blaster")
+                    mySprite10.setVelocity(100, -100)
+                    mySprite10 = sprites.create(img`
+                        . . f f f f . . 
+                        . f 4 4 4 1 f . 
+                        f 4 4 4 4 4 1 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        . f 4 4 4 4 f . 
+                        . . f f f f . . 
+                        `, SpriteKind.damaging)
+                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
+                    sprites.setDataString(mySprite10, "type", "blaster")
+                    mySprite10.setVelocity(-100, -100)
+                    mySprite10 = sprites.create(img`
+                        . . f f f f . . 
+                        . f 4 4 4 1 f . 
+                        f 4 4 4 4 4 1 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        . f 4 4 4 4 f . 
+                        . . f f f f . . 
+                        `, SpriteKind.damaging)
+                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
+                    sprites.setDataString(mySprite10, "type", "blaster")
+                    mySprite10.setVelocity(-100, 100)
+                    otherSprite.destroy()
+                    mySprite10 = sprites.create(img`
+                        . . f f f f . . 
+                        . f 4 4 4 1 f . 
+                        f 4 4 4 4 4 1 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        . f 4 4 4 4 f . 
+                        . . f f f f . . 
+                        `, SpriteKind.damaging)
+                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
+                    sprites.setDataString(mySprite10, "type", "blaster")
+                    mySprite10.setVelocity(0, 100)
+                    mySprite10 = sprites.create(img`
+                        . . f f f f . . 
+                        . f 4 4 4 1 f . 
+                        f 4 4 4 4 4 1 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        . f 4 4 4 4 f . 
+                        . . f f f f . . 
+                        `, SpriteKind.damaging)
+                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
+                    sprites.setDataString(mySprite10, "type", "blaster")
+                    mySprite10.setVelocity(0, -100)
+                    mySprite10 = sprites.create(img`
+                        . . f f f f . . 
+                        . f 4 4 4 1 f . 
+                        f 4 4 4 4 4 1 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        . f 4 4 4 4 f . 
+                        . . f f f f . . 
+                        `, SpriteKind.damaging)
+                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
+                    sprites.setDataString(mySprite10, "type", "blaster")
+                    mySprite10.setVelocity(-100, 0)
+                    mySprite10 = sprites.create(img`
+                        . . f f f f . . 
+                        . f 4 4 4 1 f . 
+                        f 4 4 4 4 4 1 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        . f 4 4 4 4 f . 
+                        . . f f f f . . 
+                        `, SpriteKind.damaging)
+                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
+                    sprites.setDataString(mySprite10, "type", "blaster")
+                    mySprite10.setVelocity(100, 0)
+                }
+                if (true) {
+                    mySprite10 = sprites.create(img`
+                        . . f f f f . . 
+                        . f 4 4 4 1 f . 
+                        f 4 4 4 4 4 1 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        . f 4 4 4 4 f . 
+                        . . f f f f . . 
+                        `, SpriteKind.damaging)
+                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
+                    sprites.setDataString(mySprite10, "type", "blaster")
+                    mySprite10.setVelocity(100, 50)
+                    mySprite10 = sprites.create(img`
+                        . . f f f f . . 
+                        . f 4 4 4 1 f . 
+                        f 4 4 4 4 4 1 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        . f 4 4 4 4 f . 
+                        . . f f f f . . 
+                        `, SpriteKind.damaging)
+                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
+                    sprites.setDataString(mySprite10, "type", "blaster")
+                    mySprite10.setVelocity(100, -50)
+                    mySprite10 = sprites.create(img`
+                        . . f f f f . . 
+                        . f 4 4 4 1 f . 
+                        f 4 4 4 4 4 1 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        . f 4 4 4 4 f . 
+                        . . f f f f . . 
+                        `, SpriteKind.damaging)
+                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
+                    sprites.setDataString(mySprite10, "type", "blaster")
+                    mySprite10.setVelocity(-100, -50)
+                    mySprite10 = sprites.create(img`
+                        . . f f f f . . 
+                        . f 4 4 4 1 f . 
+                        f 4 4 4 4 4 1 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        . f 4 4 4 4 f . 
+                        . . f f f f . . 
+                        `, SpriteKind.damaging)
+                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
+                    sprites.setDataString(mySprite10, "type", "blaster")
+                    mySprite10.setVelocity(-100, 50)
+                    otherSprite.destroy()
+                    mySprite10 = sprites.create(img`
+                        . . f f f f . . 
+                        . f 4 4 4 1 f . 
+                        f 4 4 4 4 4 1 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        . f 4 4 4 4 f . 
+                        . . f f f f . . 
+                        `, SpriteKind.damaging)
+                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
+                    sprites.setDataString(mySprite10, "type", "blaster")
+                    mySprite10.setVelocity(50, 100)
+                    mySprite10 = sprites.create(img`
+                        . . f f f f . . 
+                        . f 4 4 4 1 f . 
+                        f 4 4 4 4 4 1 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        . f 4 4 4 4 f . 
+                        . . f f f f . . 
+                        `, SpriteKind.damaging)
+                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
+                    sprites.setDataString(mySprite10, "type", "blaster")
+                    mySprite10.setVelocity(50, -100)
+                    mySprite10 = sprites.create(img`
+                        . . f f f f . . 
+                        . f 4 4 4 1 f . 
+                        f 4 4 4 4 4 1 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        . f 4 4 4 4 f . 
+                        . . f f f f . . 
+                        `, SpriteKind.damaging)
+                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
+                    sprites.setDataString(mySprite10, "type", "blaster")
+                    mySprite10.setVelocity(-50, 0)
+                    mySprite10 = sprites.create(img`
+                        . . f f f f . . 
+                        . f 4 4 4 1 f . 
+                        f 4 4 4 4 4 1 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        f 4 4 4 4 4 4 f 
+                        . f 4 4 4 4 f . 
+                        . . f f f f . . 
+                        `, SpriteKind.damaging)
+                    mySprite10.setPosition(mySprite4.x, mySprite4.y)
+                    sprites.setDataString(mySprite10, "type", "blaster")
+                    mySprite10.setVelocity(50, 0)
+                }
+                pause(1000)
+            }
+        } else if (blockSettings.readNumber("Weapon") == 3 || blockSettings.readNumber("Weapon") == 6) {
+        	
+        } else if (blockSettings.readNumber("Weapon") == 7 || blockSettings.readNumber("Weapon") == 9) {
+            sprites.destroyAllSpritesOfKind(SpriteKind.damaging)
+            mySprite9 = sprites.create(img`
+                . . . . . f f f f f f . . . . . 
+                . . . f f 2 2 2 2 2 2 f f . . . 
+                . . f 2 2 4 4 4 4 4 4 2 2 f . . 
+                . f 2 4 4 4 5 5 5 5 4 4 4 2 f . 
+                . f 2 4 5 5 5 2 2 5 5 5 4 2 f . 
+                f 2 4 4 5 2 2 4 4 2 2 5 4 4 2 f 
+                f 2 4 5 5 2 4 5 5 4 2 5 5 4 2 f 
+                f 2 4 5 2 4 5 5 5 5 4 2 5 4 2 f 
+                f 2 4 5 2 4 5 5 5 5 4 2 5 4 2 f 
+                f 2 4 5 5 2 4 5 5 4 2 5 5 4 2 f 
+                f 2 4 4 5 2 2 4 4 2 2 5 4 4 2 f 
+                . f 2 4 5 5 5 2 2 5 5 5 4 2 f . 
+                . f 2 4 4 4 5 5 5 5 4 4 4 2 f . 
+                . . f 2 2 4 4 4 4 4 4 2 2 f . . 
+                . . . f f 2 2 2 2 2 2 f f . . . 
+                . . . . . f f f f f f . . . . . 
+                `, SpriteKind.damaging)
+            mySprite9.setPosition(mySprite4.x, mySprite4.y)
+            sprites.setDataString(mySprite9, "type", "kaboomersp")
+            if (direction == 1) {
+                mySprite9.setVelocity(0, -100)
+            } else if (direction == 2) {
+                mySprite9.setVelocity(100, 0)
+            } else if (direction == 3) {
+                mySprite9.setVelocity(0, 100)
+            } else if (direction == 4) {
+                mySprite9.setVelocity(-100, 0)
+            }
+            pause(5000)
+            mySprite9.destroy()
+        } else if (blockSettings.readNumber("Weapon") == 8 || blockSettings.readNumber("Weapon") == 10) {
+            if (true) {
+                mySprite9 = sprites.create(img`
+                    . . . . . f f f f f f . . . . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . f 4 4 1 f 2 2 f 4 4 1 f . . 
+                    . f 4 4 4 4 1 f f 4 4 4 4 1 f . 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    f f 4 4 4 4 4 f f 4 4 4 4 4 f f 
+                    f 2 f 4 4 4 f 2 2 f 4 4 4 f 2 f 
+                    f 2 2 f f f 2 2 2 2 f f f 2 2 f 
+                    f 2 2 f f f 2 2 2 2 f f f 2 2 f 
+                    f 2 f 4 4 1 f 2 2 f 4 4 1 f 2 f 
+                    f f 4 4 4 4 1 f f 4 4 4 4 1 f f 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    . . f 4 4 4 f 2 2 f 4 4 4 f . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . . . . f f f f f f . . . . . 
+                    `, SpriteKind.damaging)
+                mySprite9.setPosition(mySprite4.x, mySprite4.y)
+                sprites.setDataString(mySprite9, "type", "splitshot")
+                if (blockSettings.readNumber("Weapon") == 10) {
+                    sprites.setDataString(mySprite9, "type", "splitshot+")
+                    mySprite9.setImage(img`
+                        . . . . . f f f f f f . . . . . 
+                        . . . f f f 4 4 4 4 f f f . . . 
+                        . . f 4 4 1 f 4 4 f 4 4 1 f . . 
+                        . f 4 4 4 4 1 f f 4 4 4 4 1 f . 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        f f 4 4 4 4 4 f f 4 4 4 4 4 f f 
+                        f 4 f 4 4 4 f 4 4 f 4 4 4 f 4 f 
+                        f 4 4 f f f 4 4 4 4 f f f 4 4 f 
+                        f 4 4 f f f 4 4 4 4 f f f 4 4 f 
+                        f 4 f 4 4 1 f 4 4 f 4 4 1 f 4 f 
+                        f f 4 4 4 4 1 f f 4 4 4 4 1 f f 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        . . f 4 4 4 f 4 4 f 4 4 4 f . . 
+                        . . . f f f 4 4 4 4 f f f . . . 
+                        . . . . . f f f f f f . . . . . 
+                        `)
+                }
+                mySprite9.setVelocity(100, 0)
+            }
+            if (true) {
+                mySprite9 = sprites.create(img`
+                    . . . . . f f f f f f . . . . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . f 4 4 1 f 2 2 f 4 4 1 f . . 
+                    . f 4 4 4 4 1 f f 4 4 4 4 1 f . 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    f f 4 4 4 4 4 f f 4 4 4 4 4 f f 
+                    f 2 f 4 4 4 f 2 2 f 4 4 4 f 2 f 
+                    f 2 2 f f f 2 2 2 2 f f f 2 2 f 
+                    f 2 2 f f f 2 2 2 2 f f f 2 2 f 
+                    f 2 f 4 4 1 f 2 2 f 4 4 1 f 2 f 
+                    f f 4 4 4 4 1 f f 4 4 4 4 1 f f 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    . . f 4 4 4 f 2 2 f 4 4 4 f . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . . . . f f f f f f . . . . . 
+                    `, SpriteKind.damaging)
+                mySprite9.setPosition(mySprite4.x, mySprite4.y)
+                sprites.setDataString(mySprite9, "type", "splitshot")
+                if (blockSettings.readNumber("Weapon") == 10) {
+                    sprites.setDataString(mySprite9, "type", "splitshot+")
+                    mySprite9.setImage(img`
+                        . . . . . f f f f f f . . . . . 
+                        . . . f f f 4 4 4 4 f f f . . . 
+                        . . f 4 4 1 f 4 4 f 4 4 1 f . . 
+                        . f 4 4 4 4 1 f f 4 4 4 4 1 f . 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        f f 4 4 4 4 4 f f 4 4 4 4 4 f f 
+                        f 4 f 4 4 4 f 4 4 f 4 4 4 f 4 f 
+                        f 4 4 f f f 4 4 4 4 f f f 4 4 f 
+                        f 4 4 f f f 4 4 4 4 f f f 4 4 f 
+                        f 4 f 4 4 1 f 4 4 f 4 4 1 f 4 f 
+                        f f 4 4 4 4 1 f f 4 4 4 4 1 f f 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        . . f 4 4 4 f 4 4 f 4 4 4 f . . 
+                        . . . f f f 4 4 4 4 f f f . . . 
+                        . . . . . f f f f f f . . . . . 
+                        `)
+                }
+                mySprite9.setVelocity(100, 0)
+            }
+            if (true) {
+                mySprite9 = sprites.create(img`
+                    . . . . . f f f f f f . . . . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . f 4 4 1 f 2 2 f 4 4 1 f . . 
+                    . f 4 4 4 4 1 f f 4 4 4 4 1 f . 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    f f 4 4 4 4 4 f f 4 4 4 4 4 f f 
+                    f 2 f 4 4 4 f 2 2 f 4 4 4 f 2 f 
+                    f 2 2 f f f 2 2 2 2 f f f 2 2 f 
+                    f 2 2 f f f 2 2 2 2 f f f 2 2 f 
+                    f 2 f 4 4 1 f 2 2 f 4 4 1 f 2 f 
+                    f f 4 4 4 4 1 f f 4 4 4 4 1 f f 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    . . f 4 4 4 f 2 2 f 4 4 4 f . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . . . . f f f f f f . . . . . 
+                    `, SpriteKind.damaging)
+                mySprite9.setPosition(mySprite4.x, mySprite4.y)
+                sprites.setDataString(mySprite9, "type", "splitshot")
+                if (blockSettings.readNumber("Weapon") == 10) {
+                    sprites.setDataString(mySprite9, "type", "splitshot+")
+                    mySprite9.setImage(img`
+                        . . . . . f f f f f f . . . . . 
+                        . . . f f f 4 4 4 4 f f f . . . 
+                        . . f 4 4 1 f 4 4 f 4 4 1 f . . 
+                        . f 4 4 4 4 1 f f 4 4 4 4 1 f . 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        f f 4 4 4 4 4 f f 4 4 4 4 4 f f 
+                        f 4 f 4 4 4 f 4 4 f 4 4 4 f 4 f 
+                        f 4 4 f f f 4 4 4 4 f f f 4 4 f 
+                        f 4 4 f f f 4 4 4 4 f f f 4 4 f 
+                        f 4 f 4 4 1 f 4 4 f 4 4 1 f 4 f 
+                        f f 4 4 4 4 1 f f 4 4 4 4 1 f f 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        . . f 4 4 4 f 4 4 f 4 4 4 f . . 
+                        . . . f f f 4 4 4 4 f f f . . . 
+                        . . . . . f f f f f f . . . . . 
+                        `)
+                }
+                mySprite9.setVelocity(0, -100)
+            }
+            if (true) {
+                mySprite9 = sprites.create(img`
+                    . . . . . f f f f f f . . . . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . f 4 4 1 f 2 2 f 4 4 1 f . . 
+                    . f 4 4 4 4 1 f f 4 4 4 4 1 f . 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    f f 4 4 4 4 4 f f 4 4 4 4 4 f f 
+                    f 2 f 4 4 4 f 2 2 f 4 4 4 f 2 f 
+                    f 2 2 f f f 2 2 2 2 f f f 2 2 f 
+                    f 2 2 f f f 2 2 2 2 f f f 2 2 f 
+                    f 2 f 4 4 1 f 2 2 f 4 4 1 f 2 f 
+                    f f 4 4 4 4 1 f f 4 4 4 4 1 f f 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    . . f 4 4 4 f 2 2 f 4 4 4 f . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . . . . f f f f f f . . . . . 
+                    `, SpriteKind.damaging)
+                mySprite9.setPosition(mySprite4.x, mySprite4.y)
+                sprites.setDataString(mySprite9, "type", "splitshot")
+                if (blockSettings.readNumber("Weapon") == 10) {
+                    sprites.setDataString(mySprite9, "type", "splitshot+")
+                    mySprite9.setImage(img`
+                        . . . . . f f f f f f . . . . . 
+                        . . . f f f 4 4 4 4 f f f . . . 
+                        . . f 4 4 1 f 4 4 f 4 4 1 f . . 
+                        . f 4 4 4 4 1 f f 4 4 4 4 1 f . 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        f f 4 4 4 4 4 f f 4 4 4 4 4 f f 
+                        f 4 f 4 4 4 f 4 4 f 4 4 4 f 4 f 
+                        f 4 4 f f f 4 4 4 4 f f f 4 4 f 
+                        f 4 4 f f f 4 4 4 4 f f f 4 4 f 
+                        f 4 f 4 4 1 f 4 4 f 4 4 1 f 4 f 
+                        f f 4 4 4 4 1 f f 4 4 4 4 1 f f 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        . . f 4 4 4 f 4 4 f 4 4 4 f . . 
+                        . . . f f f 4 4 4 4 f f f . . . 
+                        . . . . . f f f f f f . . . . . 
+                        `)
+                }
+                mySprite9.setVelocity(-100, 0)
+            }
+            if (true) {
+                mySprite9 = sprites.create(img`
+                    . . . . . f f f f f f . . . . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . f 4 4 1 f 2 2 f 4 4 1 f . . 
+                    . f 4 4 4 4 1 f f 4 4 4 4 1 f . 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    f f 4 4 4 4 4 f f 4 4 4 4 4 f f 
+                    f 2 f 4 4 4 f 2 2 f 4 4 4 f 2 f 
+                    f 2 2 f f f 2 2 2 2 f f f 2 2 f 
+                    f 2 2 f f f 2 2 2 2 f f f 2 2 f 
+                    f 2 f 4 4 1 f 2 2 f 4 4 1 f 2 f 
+                    f f 4 4 4 4 1 f f 4 4 4 4 1 f f 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    . . f 4 4 4 f 2 2 f 4 4 4 f . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . . . . f f f f f f . . . . . 
+                    `, SpriteKind.damaging)
+                mySprite9.setPosition(mySprite4.x, mySprite4.y)
+                sprites.setDataString(mySprite9, "type", "splitshot")
+                if (blockSettings.readNumber("Weapon") == 10) {
+                    sprites.setDataString(mySprite9, "type", "splitshot+")
+                    mySprite9.setImage(img`
+                        . . . . . f f f f f f . . . . . 
+                        . . . f f f 4 4 4 4 f f f . . . 
+                        . . f 4 4 1 f 4 4 f 4 4 1 f . . 
+                        . f 4 4 4 4 1 f f 4 4 4 4 1 f . 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        f f 4 4 4 4 4 f f 4 4 4 4 4 f f 
+                        f 4 f 4 4 4 f 4 4 f 4 4 4 f 4 f 
+                        f 4 4 f f f 4 4 4 4 f f f 4 4 f 
+                        f 4 4 f f f 4 4 4 4 f f f 4 4 f 
+                        f 4 f 4 4 1 f 4 4 f 4 4 1 f 4 f 
+                        f f 4 4 4 4 1 f f 4 4 4 4 1 f f 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        . . f 4 4 4 f 4 4 f 4 4 4 f . . 
+                        . . . f f f 4 4 4 4 f f f . . . 
+                        . . . . . f f f f f f . . . . . 
+                        `)
+                }
+                mySprite9.setVelocity(100, 100)
+            }
+            if (true) {
+                mySprite9 = sprites.create(img`
+                    . . . . . f f f f f f . . . . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . f 4 4 1 f 2 2 f 4 4 1 f . . 
+                    . f 4 4 4 4 1 f f 4 4 4 4 1 f . 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    f f 4 4 4 4 4 f f 4 4 4 4 4 f f 
+                    f 2 f 4 4 4 f 2 2 f 4 4 4 f 2 f 
+                    f 2 2 f f f 2 2 2 2 f f f 2 2 f 
+                    f 2 2 f f f 2 2 2 2 f f f 2 2 f 
+                    f 2 f 4 4 1 f 2 2 f 4 4 1 f 2 f 
+                    f f 4 4 4 4 1 f f 4 4 4 4 1 f f 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    . . f 4 4 4 f 2 2 f 4 4 4 f . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . . . . f f f f f f . . . . . 
+                    `, SpriteKind.damaging)
+                mySprite9.setPosition(mySprite4.x, mySprite4.y)
+                sprites.setDataString(mySprite9, "type", "splitshot")
+                if (blockSettings.readNumber("Weapon") == 10) {
+                    sprites.setDataString(mySprite9, "type", "splitshot+")
+                    mySprite9.setImage(img`
+                        . . . . . f f f f f f . . . . . 
+                        . . . f f f 4 4 4 4 f f f . . . 
+                        . . f 4 4 1 f 4 4 f 4 4 1 f . . 
+                        . f 4 4 4 4 1 f f 4 4 4 4 1 f . 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        f f 4 4 4 4 4 f f 4 4 4 4 4 f f 
+                        f 4 f 4 4 4 f 4 4 f 4 4 4 f 4 f 
+                        f 4 4 f f f 4 4 4 4 f f f 4 4 f 
+                        f 4 4 f f f 4 4 4 4 f f f 4 4 f 
+                        f 4 f 4 4 1 f 4 4 f 4 4 1 f 4 f 
+                        f f 4 4 4 4 1 f f 4 4 4 4 1 f f 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        . . f 4 4 4 f 4 4 f 4 4 4 f . . 
+                        . . . f f f 4 4 4 4 f f f . . . 
+                        . . . . . f f f f f f . . . . . 
+                        `)
+                }
+                mySprite9.setVelocity(100, -100)
+            }
+            if (true) {
+                mySprite9 = sprites.create(img`
+                    . . . . . f f f f f f . . . . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . f 4 4 1 f 2 2 f 4 4 1 f . . 
+                    . f 4 4 4 4 1 f f 4 4 4 4 1 f . 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    f f 4 4 4 4 4 f f 4 4 4 4 4 f f 
+                    f 2 f 4 4 4 f 2 2 f 4 4 4 f 2 f 
+                    f 2 2 f f f 2 2 2 2 f f f 2 2 f 
+                    f 2 2 f f f 2 2 2 2 f f f 2 2 f 
+                    f 2 f 4 4 1 f 2 2 f 4 4 1 f 2 f 
+                    f f 4 4 4 4 1 f f 4 4 4 4 1 f f 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    . . f 4 4 4 f 2 2 f 4 4 4 f . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . . . . f f f f f f . . . . . 
+                    `, SpriteKind.damaging)
+                mySprite9.setPosition(mySprite4.x, mySprite4.y)
+                sprites.setDataString(mySprite9, "type", "splitshot")
+                if (blockSettings.readNumber("Weapon") == 10) {
+                    sprites.setDataString(mySprite9, "type", "splitshot+")
+                    mySprite9.setImage(img`
+                        . . . . . f f f f f f . . . . . 
+                        . . . f f f 4 4 4 4 f f f . . . 
+                        . . f 4 4 1 f 4 4 f 4 4 1 f . . 
+                        . f 4 4 4 4 1 f f 4 4 4 4 1 f . 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        f f 4 4 4 4 4 f f 4 4 4 4 4 f f 
+                        f 4 f 4 4 4 f 4 4 f 4 4 4 f 4 f 
+                        f 4 4 f f f 4 4 4 4 f f f 4 4 f 
+                        f 4 4 f f f 4 4 4 4 f f f 4 4 f 
+                        f 4 f 4 4 1 f 4 4 f 4 4 1 f 4 f 
+                        f f 4 4 4 4 1 f f 4 4 4 4 1 f f 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        . . f 4 4 4 f 4 4 f 4 4 4 f . . 
+                        . . . f f f 4 4 4 4 f f f . . . 
+                        . . . . . f f f f f f . . . . . 
+                        `)
+                }
+                mySprite9.setVelocity(-100, -100)
+            }
+            if (true) {
+                mySprite9 = sprites.create(img`
+                    . . . . . f f f f f f . . . . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . f 4 4 1 f 2 2 f 4 4 1 f . . 
+                    . f 4 4 4 4 1 f f 4 4 4 4 1 f . 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    f f 4 4 4 4 4 f f 4 4 4 4 4 f f 
+                    f 2 f 4 4 4 f 2 2 f 4 4 4 f 2 f 
+                    f 2 2 f f f 2 2 2 2 f f f 2 2 f 
+                    f 2 2 f f f 2 2 2 2 f f f 2 2 f 
+                    f 2 f 4 4 1 f 2 2 f 4 4 1 f 2 f 
+                    f f 4 4 4 4 1 f f 4 4 4 4 1 f f 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                    . . f 4 4 4 f 2 2 f 4 4 4 f . . 
+                    . . . f f f 2 2 2 2 f f f . . . 
+                    . . . . . f f f f f f . . . . . 
+                    `, SpriteKind.damaging)
+                mySprite9.setPosition(mySprite4.x, mySprite4.y)
+                sprites.setDataString(mySprite9, "type", "splitshot")
+                if (blockSettings.readNumber("Weapon") == 10) {
+                    sprites.setDataString(mySprite9, "type", "splitshot+")
+                    mySprite9.setImage(img`
+                        . . . . . f f f f f f . . . . . 
+                        . . . f f f 4 4 4 4 f f f . . . 
+                        . . f 4 4 1 f 4 4 f 4 4 1 f . . 
+                        . f 4 4 4 4 1 f f 4 4 4 4 1 f . 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        f f 4 4 4 4 4 f f 4 4 4 4 4 f f 
+                        f 4 f 4 4 4 f 4 4 f 4 4 4 f 4 f 
+                        f 4 4 f f f 4 4 4 4 f f f 4 4 f 
+                        f 4 4 f f f 4 4 4 4 f f f 4 4 f 
+                        f 4 f 4 4 1 f 4 4 f 4 4 1 f 4 f 
+                        f f 4 4 4 4 1 f f 4 4 4 4 1 f f 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        . f 4 4 4 4 4 f f 4 4 4 4 4 f . 
+                        . . f 4 4 4 f 4 4 f 4 4 4 f . . 
+                        . . . f f f 4 4 4 4 f f f . . . 
+                        . . . . . f f f f f f . . . . . 
+                        `)
+                }
+                mySprite9.setVelocity(-100, 100)
+            }
+        }
+    }
 })
 controller.player1.onButtonEvent(ControllerButton.Up, ControllerButtonEvent.Pressed, function () {
     if (!(controller.player2.isPressed(ControllerButton.Up) || (controller.player2.isPressed(ControllerButton.Right) || (controller.player2.isPressed(ControllerButton.Down) || controller.player2.isPressed(ControllerButton.Left))))) {
@@ -417,6 +1046,8 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                 Pulltype = randint(1, 4)
             } else if (blockSettings.readNumber("section") == 2) {
                 Pulltype = randint(1, 6)
+            } else if (blockSettings.readNumber("section") == 3) {
+                Pulltype = randint(1, 8)
             }
             if (numofpulls == 0) {
                 pull1 = Pulltype
@@ -438,6 +1069,18 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                 } else if (Pulltype == 6) {
                     animation.setAction(mySprite2, ActionKind.roulette_enemy)
                     numofenemy += 1
+                } else if (Pulltype == 7) {
+                    animation.setAction(mySprite2, ActionKind.roulette_sp1)
+                    blockSettings.writeNumber("special", blockSettings.readNumber("special") + 1)
+                    while (blockSettings.readNumber("special") > 10) {
+                        blockSettings.writeNumber("special", blockSettings.readNumber("special") - 1)
+                    }
+                } else if (Pulltype == 8) {
+                    animation.setAction(mySprite2, ActionKind.roulette_sp2)
+                    blockSettings.writeNumber("special", blockSettings.readNumber("special") + 3)
+                    while (blockSettings.readNumber("special") > 10) {
+                        blockSettings.writeNumber("special", blockSettings.readNumber("special") - 1)
+                    }
                 }
             } else if (numofpulls == 1) {
                 pull2 = Pulltype
@@ -459,6 +1102,18 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                 } else if (Pulltype == 6) {
                     animation.setAction(mySprite, ActionKind.roulette_enemy)
                     numofenemy += 1
+                } else if (Pulltype == 7) {
+                    animation.setAction(mySprite, ActionKind.roulette_sp1)
+                    blockSettings.writeNumber("special", blockSettings.readNumber("special") + 1)
+                    while (blockSettings.readNumber("special") > 10) {
+                        blockSettings.writeNumber("special", blockSettings.readNumber("special") - 1)
+                    }
+                } else if (Pulltype == 8) {
+                    animation.setAction(mySprite, ActionKind.roulette_sp2)
+                    blockSettings.writeNumber("special", blockSettings.readNumber("special") + 3)
+                    while (blockSettings.readNumber("special") > 10) {
+                        blockSettings.writeNumber("special", blockSettings.readNumber("special") - 1)
+                    }
                 }
             } else if (numofpulls == 2) {
                 pull3 = Pulltype
@@ -480,11 +1135,29 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                 } else if (Pulltype == 6) {
                     animation.setAction(mySprite3, ActionKind.roulette_enemy)
                     numofenemy += 1
+                } else if (Pulltype == 7) {
+                    animation.setAction(mySprite3, ActionKind.roulette_sp1)
+                    blockSettings.writeNumber("special", blockSettings.readNumber("special") + 1)
+                    while (blockSettings.readNumber("special") > 10) {
+                        blockSettings.writeNumber("special", blockSettings.readNumber("special") - 1)
+                    }
+                } else if (Pulltype == 8) {
+                    animation.setAction(mySprite3, ActionKind.roulette_sp2)
+                    blockSettings.writeNumber("special", blockSettings.readNumber("special") + 3)
+                    while (blockSettings.readNumber("special") > 10) {
+                        blockSettings.writeNumber("special", blockSettings.readNumber("special") - 1)
+                    }
                 }
             } else if (numofpulls > 2) {
                 readyforpull = false
                 if (boss) {
-                    tiles.setCurrentTilemap(tileUtil.createSmallMap(tilemap`level5`))
+                    if (blockSettings.readNumber("section") == 2) {
+                        tiles.setCurrentTilemap(tileUtil.createSmallMap(tilemap`level0`))
+                    } else if (blockSettings.readNumber("section") == 3) {
+                        tiles.setCurrentTilemap(tileUtil.createSmallMap(tilemap`level12`))
+                    } else {
+                        tiles.setCurrentTilemap(tileUtil.createSmallMap(tilemap`level5`))
+                    }
                 } else {
                     tiles.setCurrentTilemap(tileUtil.createSmallMap(tilemap`level2`))
                 }
@@ -507,7 +1180,16 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                     . . . c c c c c c c c b b . . . 
                     `, SpriteKind.Player)
                 tiles.placeOnRandomTile(mySprite4, assets.tile`myTile0`)
-                if (blockSettings.readNumber("Weapon") == 2 || blockSettings.readNumber("Weapon") == 2) {
+                if (blockSettings.readNumber("section") == 3) {
+                    statusbar = statusbars.create(20, 4, StatusBarKind.Magic)
+                    statusbar.max = 10
+                    statusbar.value = blockSettings.readNumber("special")
+                    statusbar.setColor(9, 15, 1)
+                    statusbar.setBarBorder(1, 15)
+                    statusbar.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
+                    statusbar.attachToSprite(mySprite4)
+                }
+                if (blockSettings.readNumber("Weapon") == 2 || blockSettings.readNumber("Weapon") == 5) {
                     controller.moveSprite(mySprite4, 150, 150)
                 } else {
                     controller.moveSprite(mySprite4, 100, 100)
@@ -686,8 +1368,8 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                         . . . . . . . . . . . . . . . . 
                         `, SpriteKind.Boss)
                     boss_bar = statusbars.create(120, 6, StatusBarKind.BossHealth)
-                    boss_bar.max = 300
-                    boss_bar.value = 300
+                    boss_bar.max = 100 + 200 * blockSettings.readNumber("section")
+                    boss_bar.value = 100 + 200 * blockSettings.readNumber("section")
                     boss_bar.setColor(2, 15, 4)
                     boss_bar.setBarBorder(1, 15)
                     boss_bar.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
@@ -715,7 +1397,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                             `, SpriteKind.Enemy)
                         animation.attachAnimation(mySprite6, anim)
                         animation.attachAnimation(mySprite6, anim2)
-                        mySprite6.follow(spritetofollow)
+                        mySprite6.follow(spritetofollow, 20 + 80 * blockSettings.readNumber("section"))
                         spritetofollow = mySprite6
                     }
                 } else {
@@ -822,6 +1504,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                     if (numofenemy == 3) {
                         spritetofollow = mySprite6
                         for (let index = 0; index < 4; index++) {
+                            pause(500)
                             mySprite6 = sprites.create(img`
                                 . . . c c c c c c . . . . . . . 
                                 . . c 6 7 7 7 7 6 c . . . . . . 
@@ -1618,6 +2301,11 @@ scene.onHitWall(SpriteKind.damaging, function (sprite, location) {
         sprites.setDataString(mySprite10, "type", "blaster")
         mySprite10.setVelocity(100, 0)
         sprite.destroy()
+    } else {
+        if (sprites.readDataString(sprite, "type") == "kaboomersp") {
+            sprite.setVelocity(0, 0)
+            sprite.setScale(5, ScaleAnchor.Middle)
+        }
     }
 })
 statusbars.onZero(StatusBarKind.EnemyHealth, function (status) {
@@ -1646,6 +2334,7 @@ controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 info.onLifeZero(function () {
+    sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
     damagable = false
     tiles.placeOnRandomTile(mySprite4, assets.tile`myTile0`)
     if (info.score() >= 100) {
@@ -1663,8 +2352,7 @@ info.onLifeZero(function () {
         blockSettings.clear()
         game.reset()
     }
-    pause(3000)
-    damagable = true
+    game.reset()
 })
 controller.player2.onButtonEvent(ControllerButton.Left, ControllerButtonEvent.Pressed, function () {
     direction = 4
@@ -1695,18 +2383,17 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         }
     }
 })
-let mySprite9: Sprite = null
-let statusbar: StatusBarSprite = null
 let spritetofollow: Sprite = null
 let anim2: animation.Animation = null
 let mySprite5: Sprite = null
-let mySprite4: Sprite = null
+let statusbar: StatusBarSprite = null
 let pull3 = 0
 let pull2 = 0
 let pull1 = 0
 let Pulltype = 0
+let mySprite9: Sprite = null
+let mySprite4: Sprite = null
 let mySprite10: Sprite = null
-let boss_bar: StatusBarSprite = null
 let upgrade_string = ""
 let weapon_string = ""
 let upgrade_cost = 0
@@ -1717,6 +2404,7 @@ let hp_item = 0
 let weapontype = 0
 let mySprite6: Sprite = null
 let boss_sprite: Sprite = null
+let boss_bar: StatusBarSprite = null
 let anim: animation.Animation = null
 let mySprite3: Sprite = null
 let mySprite2: Sprite = null
@@ -1731,14 +2419,18 @@ let Ingame = false
 let readyforpull = false
 let damagable = false
 let boss = false
+blockSettings.writeNumber("Weapon", 5)
 if (!(blockSettings.exists("Round"))) {
     blockSettings.writeNumber("Round", 1)
-    blockSettings.writeNumber("section", 2)
+    blockSettings.writeNumber("section", 3)
+    blockSettings.writeNumber("special", 0)
 }
 if (blockSettings.readNumber("section") == 1) {
     scene.setBackgroundColor(2)
 } else if (blockSettings.readNumber("section") == 2) {
     scene.setBackgroundColor(8)
+} else if (blockSettings.readNumber("section") == 3) {
+    scene.setBackgroundColor(12)
 }
 if (blockSettings.readNumber("boss next") == 1) {
     boss = true
@@ -1756,7 +2448,7 @@ if (!(blockSettings.exists("hp"))) {
     info.setLife(blockSettings.readNumber("hp"))
 }
 if (!(blockSettings.exists("coins"))) {
-    info.setScore(0)
+    info.setScore(10)
 } else {
     info.setScore(blockSettings.readNumber("coins"))
 }
@@ -2289,6 +2981,92 @@ if (!(boss)) {
             ........................................
             `)
     }
+    if (blockSettings.readNumber("section") > 2) {
+        anim.addAnimationFrame(img`
+            ........................................
+            ........................................
+            ..111111111111111111111111111111111111..
+            ..111111111111111111111111111111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffff55ffffff11111111111..
+            ..11111111111fffff5555fffff11111111111..
+            ..11111111111ffff555555ffff11111111111..
+            ..11111111111fff55555555fff11111111111..
+            ..11111111111fffff5555fffff11111111111..
+            ..11111111111fffff5555fffff11111111111..
+            ..11111111111fffff5555fffff11111111111..
+            ..11111111111fffff5555fffff11111111111..
+            ..11111111111fffff5555fffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..111111111111111111111111111111111111..
+            ..111111111111111111111111111111111111..
+            ........................................
+            ........................................
+            `)
+        anim.addAnimationFrame(img`
+            ........................................
+            ........................................
+            ..111111111111111111111111111111111111..
+            ..111111111111111111111111111111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffff44ffffff11111111111..
+            ..11111111111fffff4444fffff11111111111..
+            ..11111111111ffff444444ffff11111111111..
+            ..11111111111fff44444444fff11111111111..
+            ..11111111111fffff4444fffff11111111111..
+            ..11111111111fffff4554fffff11111111111..
+            ..11111111111fffff5555fffff11111111111..
+            ..11111111111ffff555555ffff11111111111..
+            ..11111111111fff55555555fff11111111111..
+            ..11111111111fffff5555fffff11111111111..
+            ..11111111111f999955559999f11111111111..
+            ..11111111111f999955559999f11111111111..
+            ..11111111111f999955559999f11111111111..
+            ..11111111111f999955559999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..111111111111111111111111111111111111..
+            ..111111111111111111111111111111111111..
+            ........................................
+            ........................................
+            `)
+    }
     animation.attachAnimation(mySprite, anim)
     animation.attachAnimation(mySprite2, anim)
     animation.attachAnimation(mySprite3, anim)
@@ -2575,24 +3353,118 @@ if (!(boss)) {
         animation.attachAnimation(mySprite2, anim)
         animation.attachAnimation(mySprite3, anim)
     }
+    if (blockSettings.readNumber("section") > 2) {
+        anim = animation.createAnimation(ActionKind.roulette_sp1, 100)
+        anim.addAnimationFrame(img`
+            ........................................
+            ........................................
+            ..111111111111111111111111111111111111..
+            ..111111111111111111111111111111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffff55ffffff11111111111..
+            ..11111111111fffff5555fffff11111111111..
+            ..11111111111ffff555555ffff11111111111..
+            ..11111111111fff55555555fff11111111111..
+            ..11111111111fffff5555fffff11111111111..
+            ..11111111111fffff5555fffff11111111111..
+            ..11111111111fffff5555fffff11111111111..
+            ..11111111111fffff5555fffff11111111111..
+            ..11111111111fffff5555fffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..111111111111111111111111111111111111..
+            ..111111111111111111111111111111111111..
+            ........................................
+            ........................................
+            `)
+        animation.attachAnimation(mySprite, anim)
+        animation.attachAnimation(mySprite2, anim)
+        animation.attachAnimation(mySprite3, anim)
+        anim = animation.createAnimation(ActionKind.roulette_sp2, 100)
+        anim.addAnimationFrame(img`
+            ........................................
+            ........................................
+            ..111111111111111111111111111111111111..
+            ..111111111111111111111111111111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..11111111111ffffff44ffffff11111111111..
+            ..11111111111fffff4444fffff11111111111..
+            ..11111111111ffff444444ffff11111111111..
+            ..11111111111fff44444444fff11111111111..
+            ..11111111111fffff4444fffff11111111111..
+            ..11111111111fffff4554fffff11111111111..
+            ..11111111111fffff5555fffff11111111111..
+            ..11111111111ffff555555ffff11111111111..
+            ..11111111111fff55555555fff11111111111..
+            ..11111111111fffff5555fffff11111111111..
+            ..11111111111f999955559999f11111111111..
+            ..11111111111f999955559999f11111111111..
+            ..11111111111f999955559999f11111111111..
+            ..11111111111f999955559999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111f999999999999f11111111111..
+            ..11111111111ffffffffffffff11111111111..
+            ..111111111111111111111111111111111111..
+            ..111111111111111111111111111111111111..
+            ........................................
+            ........................................
+            `)
+        animation.attachAnimation(mySprite, anim)
+        animation.attachAnimation(mySprite2, anim)
+        animation.attachAnimation(mySprite3, anim)
+    }
 }
 readyforpull = true
 while (!(Ingame)) {
     pause(100)
 }
 if (boss) {
-    while (boss) {
+    while (boss_bar.value > 0) {
         pause(100)
         boss_sprite.setVelocity(-100, 0)
         pause(100)
         while (!(mySprite6.tileKindAt(TileDirection.Left, assets.tile`myTile1`))) {
-            pause(100)
+            pause(1)
         }
         tiles.placeOnRandomTile(boss_sprite, assets.tile`myTile1`)
         boss_sprite.setVelocity(100, 0)
         pause(100)
         while (!(mySprite6.tileKindAt(TileDirection.Right, assets.tile`myTile2`))) {
-            pause(100)
+            pause(1)
         }
         tiles.placeOnRandomTile(boss_sprite, assets.tile`myTile2`)
     }
@@ -2602,149 +3474,151 @@ if (boss) {
     }
 }
 pause(1000)
-if (numofchest > 0) {
-    music.playTone(392, music.beat(BeatFraction.Half))
-}
-if (numofchest == 1) {
-    if (game.ask("Treasure!", "10 coins")) {
-        info.changeScoreBy(10)
-        music.baDing.play()
+if (info.life() > 0) {
+    if (numofchest > 0) {
+        music.playTone(392, music.beat(BeatFraction.Half))
     }
-}
-if (numofchest == 2) {
-    if (blockSettings.readNumber("section") == 1) {
-        weapontype = randint(1, 4)
-    } else if (blockSettings.readNumber("section") == 2) {
-        weapontype = randint(1, 6)
-    }
-    if (weapontype == 1) {
-        if (game.ask("Treasure!", "Sword plus 15 coins")) {
-            blockSettings.writeNumber("Weapon", 1)
-            info.changeScoreBy(15)
-            music.baDing.play()
-        }
-    } else if (weapontype == 2) {
-        if (game.ask("Treasure!", "Blaster plus 15 coins")) {
-            blockSettings.writeNumber("Weapon", 2)
-            info.changeScoreBy(15)
-            music.baDing.play()
-        }
-    } else if (weapontype == 3) {
-        if (game.ask("Treasure!", "Launcher plus 15 coins")) {
-            blockSettings.writeNumber("Weapon", 3)
-            info.changeScoreBy(15)
-            music.baDing.play()
-        }
-    } else if (weapontype == 4) {
-        if (game.ask("Treasure!", "5 hp plus 15 coins")) {
-            info.changeLifeBy(5)
-            info.changeScoreBy(15)
-            music.baDing.play()
-        }
-    } else if (weapontype == 5) {
-        if (game.ask("Treasure!", "Kaboomer plus 15 coins")) {
-            blockSettings.writeNumber("Weapon", 7)
-            info.changeScoreBy(15)
-            music.baDing.play()
-        }
-    } else if (weapontype == 6) {
-        if (game.ask("Treasure!", "Splitshot plus 15 coins")) {
-            blockSettings.writeNumber("Weapon", 8)
-            info.changeScoreBy(15)
+    if (numofchest == 1) {
+        if (game.ask("Treasure!", "10 coins")) {
+            info.changeScoreBy(10)
             music.baDing.play()
         }
     }
-}
-if (numofchest == 3) {
-    if (blockSettings.readNumber("section") == 1) {
-        weapontype = randint(1, 3)
-    } else if (blockSettings.readNumber("section") == 2) {
-        weapontype = randint(1, 5)
-    }
-    if (weapontype == 1) {
-        if (game.ask("Treasure!", "Mega Sword plus 30 coins")) {
-            blockSettings.writeNumber("Weapon", 4)
-            info.changeScoreBy(30)
-            music.magicWand.play()
+    if (numofchest == 2) {
+        if (blockSettings.readNumber("section") == 1) {
+            weapontype = randint(1, 4)
+        } else if (blockSettings.readNumber("section") == 2) {
+            weapontype = randint(1, 6)
         }
-    } else if (weapontype == 2) {
-        if (game.ask("Treasure!", "Mega Blaster plus 30 coins")) {
-            blockSettings.writeNumber("Weapon", 5)
-            info.changeScoreBy(30)
-            music.magicWand.play()
-        }
-    } else if (weapontype == 3) {
-        if (game.ask("Treasure!", "Mega Launcher plus 30 coins")) {
-            blockSettings.writeNumber("Weapon", 6)
-            info.changeScoreBy(30)
-            music.magicWand.play()
-        }
-    } else if (weapontype == 4) {
-        if (game.ask("Treasure!", "Mega Kaboomer plus 30 coins")) {
-            blockSettings.writeNumber("Weapon", 9)
-            info.changeScoreBy(30)
-            music.magicWand.play()
-        }
-    } else if (weapontype == 5) {
-        if (game.ask("Treasure!", "Mega Splitshot plus 30 coins")) {
-            blockSettings.writeNumber("Weapon", 10)
-            info.changeScoreBy(30)
-            music.magicWand.play()
-        }
-    }
-}
-pause(500)
-if (numofshop > 0 && info.score() >= 20) {
-    music.playTone(392, music.beat(BeatFraction.Half))
-    if (game.ask("Shop might Appear: " + convertToText(16 * numofshop) + "%", "visit?")) {
-        if (Math.percentChance(33 * numofshop)) {
-            hp_item = randint(2, 10)
-            hp_cost = randint(8, 15)
-            weapon_item = randint(1, 5)
-            weapon_cost = randint(50, 100)
-            upgrade_cost = randint(100, 200)
-            if (weapon_item == 1) {
-                weapon_string = "sword"
-            } else if (weapon_item == 2) {
-                weapon_string = "blaster"
-            } else if (weapon_item == 3) {
-                weapon_string = "launcher"
-            } else if (weapon_item == 4) {
-                weapon_string = "kaboomer"
-                weapon_item = 7
-            } else if (weapon_item == 5) {
-                weapon_string = "splitshot"
-                weapon_item = 8
+        if (weapontype == 1) {
+            if (game.ask("Treasure!", "Sword plus 15 coins")) {
+                blockSettings.writeNumber("Weapon", 1)
+                info.changeScoreBy(15)
+                music.baDing.play()
             }
-            if (blockSettings.readNumber("Weapon") == 1) {
-                upgrade_string = "mega sword"
-            } else if (blockSettings.readNumber("Weapon") == 2) {
-                upgrade_string = "mega blaster"
-            } else if (blockSettings.readNumber("Weapon") == 3) {
-                upgrade_string = "mega launcher"
-            } else if (blockSettings.readNumber("Weapon") == 7) {
-                upgrade_string = "mega kaboomer"
-            } else if (blockSettings.readNumber("Weapon") == 8) {
-                upgrade_string = "mega splitshot"
-            } else {
-                upgrade_string = "(not available)"
+        } else if (weapontype == 2) {
+            if (game.ask("Treasure!", "Blaster plus 15 coins")) {
+                blockSettings.writeNumber("Weapon", 2)
+                info.changeScoreBy(15)
+                music.baDing.play()
             }
-            game.splash("Found Shop!", "" + convertToText(hp_item) + "hp" + " cost: " + convertToText(hp_item * hp_cost) + ", " + ("" + weapon_string + " cost: " + convertToText(weapon_cost)) + ", " + ("upgrade to mega weapon" + " cost: " + convertToText(upgrade_cost)))
-            if (game.ask("" + convertToText(hp_item) + "hp", "cost:" + convertToText(hp_item * hp_cost))) {
-                if (info.score() >= hp_item * hp_cost) {
-                    info.changeScoreBy(hp_item * hp_cost * -1)
-                    info.changeLifeBy(hp_item)
-                } else {
-                    game.splash("NOT ENOUGH COINS!", "you can't buy this!")
+        } else if (weapontype == 3) {
+            if (game.ask("Treasure!", "Launcher plus 15 coins")) {
+                blockSettings.writeNumber("Weapon", 3)
+                info.changeScoreBy(15)
+                music.baDing.play()
+            }
+        } else if (weapontype == 4) {
+            if (game.ask("Treasure!", "5 hp plus 15 coins")) {
+                info.changeLifeBy(5)
+                info.changeScoreBy(15)
+                music.baDing.play()
+            }
+        } else if (weapontype == 5) {
+            if (game.ask("Treasure!", "Kaboomer plus 15 coins")) {
+                blockSettings.writeNumber("Weapon", 7)
+                info.changeScoreBy(15)
+                music.baDing.play()
+            }
+        } else if (weapontype == 6) {
+            if (game.ask("Treasure!", "Splitshot plus 15 coins")) {
+                blockSettings.writeNumber("Weapon", 8)
+                info.changeScoreBy(15)
+                music.baDing.play()
+            }
+        }
+    }
+    if (numofchest == 3) {
+        if (blockSettings.readNumber("section") == 1) {
+            weapontype = randint(1, 3)
+        } else if (blockSettings.readNumber("section") == 2) {
+            weapontype = randint(1, 5)
+        }
+        if (weapontype == 1) {
+            if (game.ask("Treasure!", "Mega Sword plus 30 coins")) {
+                blockSettings.writeNumber("Weapon", 4)
+                info.changeScoreBy(30)
+                music.magicWand.play()
+            }
+        } else if (weapontype == 2) {
+            if (game.ask("Treasure!", "Mega Blaster plus 30 coins")) {
+                blockSettings.writeNumber("Weapon", 5)
+                info.changeScoreBy(30)
+                music.magicWand.play()
+            }
+        } else if (weapontype == 3) {
+            if (game.ask("Treasure!", "Mega Launcher plus 30 coins")) {
+                blockSettings.writeNumber("Weapon", 6)
+                info.changeScoreBy(30)
+                music.magicWand.play()
+            }
+        } else if (weapontype == 4) {
+            if (game.ask("Treasure!", "Mega Kaboomer plus 30 coins")) {
+                blockSettings.writeNumber("Weapon", 9)
+                info.changeScoreBy(30)
+                music.magicWand.play()
+            }
+        } else if (weapontype == 5) {
+            if (game.ask("Treasure!", "Mega Splitshot plus 30 coins")) {
+                blockSettings.writeNumber("Weapon", 10)
+                info.changeScoreBy(30)
+                music.magicWand.play()
+            }
+        }
+    }
+    pause(500)
+    if (numofshop > 0 && info.score() >= 20) {
+        music.playTone(392, music.beat(BeatFraction.Half))
+        if (game.ask("Shop might Appear: " + convertToText(16 * numofshop) + "%", "visit?")) {
+            if (Math.percentChance(33 * numofshop)) {
+                hp_item = randint(2, 10)
+                hp_cost = randint(8, 15)
+                weapon_item = randint(1, 5)
+                weapon_cost = randint(50, 100)
+                upgrade_cost = randint(100, 200)
+                if (weapon_item == 1) {
+                    weapon_string = "sword"
+                } else if (weapon_item == 2) {
+                    weapon_string = "blaster"
+                } else if (weapon_item == 3) {
+                    weapon_string = "launcher"
+                } else if (weapon_item == 4) {
+                    weapon_string = "kaboomer"
+                    weapon_item = 7
+                } else if (weapon_item == 5) {
+                    weapon_string = "splitshot"
+                    weapon_item = 8
                 }
-            }
-            pause(100)
-            if (game.ask(weapon_string, "cost: " + convertToText(weapon_cost))) {
-                if (info.score() >= weapon_cost) {
-                    info.changeScoreBy(weapon_cost * -1)
-                    blockSettings.writeNumber("Weapon", weapon_item)
+                if (blockSettings.readNumber("Weapon") == 1) {
+                    upgrade_string = "mega sword"
+                } else if (blockSettings.readNumber("Weapon") == 2) {
+                    upgrade_string = "mega blaster"
+                } else if (blockSettings.readNumber("Weapon") == 3) {
+                    upgrade_string = "mega launcher"
+                } else if (blockSettings.readNumber("Weapon") == 7) {
+                    upgrade_string = "mega kaboomer"
+                } else if (blockSettings.readNumber("Weapon") == 8) {
+                    upgrade_string = "mega splitshot"
                 } else {
-                    game.splash("NOT ENOUGH COINS!", "you can't buy this!")
+                    upgrade_string = "(not available)"
+                }
+                game.splash("Found Shop!", "" + convertToText(hp_item) + "hp" + " cost: " + convertToText(hp_item * hp_cost) + ", " + ("" + weapon_string + " cost: " + convertToText(weapon_cost)) + ", " + ("upgrade to mega weapon" + " cost: " + convertToText(upgrade_cost)))
+                if (game.ask("" + convertToText(hp_item) + "hp", "cost:" + convertToText(hp_item * hp_cost))) {
+                    if (info.score() >= hp_item * hp_cost) {
+                        info.changeScoreBy(hp_item * hp_cost * -1)
+                        info.changeLifeBy(hp_item)
+                    } else {
+                        game.splash("NOT ENOUGH COINS!", "you can't buy this!")
+                    }
+                }
+                pause(100)
+                if (game.ask(weapon_string, "cost: " + convertToText(weapon_cost))) {
+                    if (info.score() >= weapon_cost) {
+                        info.changeScoreBy(weapon_cost * -1)
+                        blockSettings.writeNumber("Weapon", weapon_item)
+                    } else {
+                        game.splash("NOT ENOUGH COINS!", "you can't buy this!")
+                    }
                 }
                 pause(300)
                 if (game.ask("upgrade to mega weapon", "cost: " + convertToText(upgrade_cost))) {
@@ -2771,26 +3645,39 @@ if (numofshop > 0 && info.score() >= 20) {
             }
         }
     }
-}
-pause(500)
-if (blockSettings.readNumber("boss next") == 1) {
-    blockSettings.writeNumber("section", blockSettings.readNumber("section") + 1)
-    blockSettings.writeNumber("Round", 1)
-    blockSettings.writeNumber("boss next", 0)
-}
-if (numofvs > 0 && info.score() >= 100) {
-    music.playTone(392, music.beat(BeatFraction.Half))
-    if (game.ask("Boss might Appear: " + convertToText(33 * numofvs) + "%", "fight? cost: 100")) {
-        info.changeScoreBy(-100)
-        if (Math.percentChance(33 * numofvs)) {
-            blockSettings.writeNumber("boss next", 1)
+    pause(500)
+    if (blockSettings.readNumber("boss next") == 1) {
+        if (blockSettings.readNumber("section") == 3) {
+            color.startFade(color.originalPalette, color.White, 2000)
+            for (let index = 0; index < 4; index++) {
+                music.zapped.playUntilDone()
+                pause(100)
+            }
+            pause(500)
+            music.bigCrash.playUntilDone()
+            pause(2000)
+            blockSettings.clear()
+            game.reset()
+        } else {
+            blockSettings.writeNumber("section", blockSettings.readNumber("section") + 1)
+            blockSettings.writeNumber("Round", 1)
+            blockSettings.writeNumber("boss next", 0)
         }
     }
-} else {
-    music.playTone(392, music.beat(BeatFraction.Half))
-    game.splash("Next Round!")
+    if (numofvs > 0 && info.score() >= 100) {
+        music.playTone(392, music.beat(BeatFraction.Half))
+        if (game.ask("Boss might Appear: " + convertToText(33 * numofvs) + "%", "fight? cost: 100")) {
+            info.changeScoreBy(-100)
+            if (Math.percentChance(33 * numofvs)) {
+                blockSettings.writeNumber("boss next", 1)
+            }
+        }
+    } else {
+        music.playTone(392, music.beat(BeatFraction.Half))
+        game.splash("Next Round!")
+    }
+    blockSettings.writeNumber("Round", blockSettings.readNumber("Round") + 1)
+    blockSettings.writeNumber("hp", info.life())
+    blockSettings.writeNumber("coins", info.score())
+    game.reset()
 }
-blockSettings.writeNumber("Round", blockSettings.readNumber("Round") + 1)
-blockSettings.writeNumber("hp", info.life())
-blockSettings.writeNumber("coins", info.score())
-game.reset()
