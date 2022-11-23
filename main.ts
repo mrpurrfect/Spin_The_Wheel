@@ -2479,7 +2479,8 @@ controller.player2.onButtonEvent(ControllerButton.Right, ControllerButtonEvent.P
 })
 controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
     if (game.ask("RESTART?", "you cannot undo this")) {
-        info.setLife(0)
+        blockSettings.clear()
+        game.reset()
     }
 })
 info.onLifeZero(function () {
