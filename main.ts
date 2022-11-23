@@ -3809,7 +3809,7 @@ if (info.life() > 0) {
             game.reset()
         } else {
             blockSettings.writeNumber("section", blockSettings.readNumber("section") + 1)
-            blockSettings.writeNumber("Round", 1)
+            blockSettings.writeNumber("Round", 0)
             blockSettings.writeNumber("boss next", 0)
         }
     }
