@@ -3636,7 +3636,7 @@ if (info.life() > 0) {
     if (numofchest == 2) {
         if (blockSettings.readNumber("section") == 1) {
             weapontype = randint(1, 4)
-        } else if (blockSettings.readNumber("section") == 2) {
+        } else if (blockSettings.readNumber("section") > 1) {
             weapontype = randint(1, 6)
         }
         if (weapontype == 1) {
